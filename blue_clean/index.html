@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
+  <!-- Mobile-first + ajuste de zoom accesible -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Landing — Ejemplo Sencillo</title>
-  <meta name="description" content="Página de ejemplo genérica sin sesgo de industria." />
+  <title>Landing — Ejemplo Sencillo (Mobile-first)</title>
+  <meta name="description" content="Página de ejemplo genérica con prioridad móvil y responsive refinado." />
   <style>
     /* =========
-       Diseño base con variables (paleta primaria / secundaria / acento)
-       Colores tomados como ejemplo de una paleta azul/verde
+       Tokens (mobile-first)
        ========= */
     :root{
       /* Primary (azules) */
@@ -24,50 +24,64 @@
       --accent-300:#66e0ff; --accent-400:#33d6ff; --accent-500:#00ccff;
       --accent-600:#00a3cc; --accent-700:#007a99; --accent-800:#005266; --accent-900:#002933; --accent-950:#00141a;
 
-      --bg: #ffffff;
-      --fg: #0f172a;            /* slate-900 aprox */
-      --muted: #475569;         /* slate-600 aprox */
-      --panel: #ffffff;
-      --border: rgba(15,23,42,.08);
+      --bg:#ffffff;
+      --fg:#0f172a;
+      --muted:#475569;
+      --panel:#ffffff;
+      --border:rgba(15,23,42,.08);
       --ring: color-mix(in oklab, var(--primary-500) 70%, white);
-      --shadow: 0 10px 30px rgba(2,6,23,.08);
-      --radius: 16px;
+      --shadow:0 10px 30px rgba(2,6,23,.08);
+      --radius:16px;
 
-      --container: 1100px;
+      --container: 100%; /* mobile: ancho completo */
+      --container-max: 1100px; /* límite en desktop */
+      --space-section: 44px;   /* mobile paddings */
     }
     [data-theme="dark"]{
-      --bg:#0b1020;
-      --fg:#e5e7eb;
-      --muted:#a1a1aa;
-      --panel:#0f162c;
+      --bg:#0b1020; --fg:#e5e7eb; --muted:#a1a1aa; --panel:#0f162c;
       --border: rgba(255,255,255,.08);
       --shadow: 0 10px 30px rgba(0,0,0,.45);
     }
 
     /* =========
-       Reset y utilidades mínimas
+       Reset + base (mobile-first)
        ========= */
     *{ box-sizing:border-box }
     html,body{ height:100% }
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--fg); background:
-        radial-gradient(800px 400px at 10% -5%, color-mix(in oklab, var(--accent-400) 12%, transparent) , transparent),
-        radial-gradient(600px 300px at 110% 110%, color-mix(in oklab, var(--primary-400) 12%, transparent) , transparent),
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color:var(--fg);
+      background:
+        radial-gradient(320px 200px at 10% -5%, color-mix(in oklab, var(--accent-400) 10%, transparent), transparent),
+        radial-gradient(240px 160px at 110% 110%, color-mix(in oklab, var(--primary-400) 10%, transparent), transparent),
         var(--bg);
       line-height:1.6;
       scroll-behavior:smooth;
+      /* Safe area para móviles con notch */
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
-    img{ max-width:100%; display:block }
+    img{ max-width:100%; height:auto; display:block }
     a{ color:inherit; text-decoration:none }
-    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:20px }
-    .grid{ display:grid; gap:20px }
+
+    .container{
+      width:var(--container);
+      max-width:var(--container-max);
+      margin-inline:auto;
+      padding-inline:16px; /* móvil más compacto */
+    }
+
+    .grid{ display:grid; gap:16px } /* gap menor en móvil */
+
     .btn{
       appearance:none; border:1px solid var(--border);
-      padding:.75rem 1rem; border-radius:999px; background:var(--panel); color:var(--fg);
-      display:inline-flex; align-items:center; gap:.5rem; font-weight:600; box-shadow:var(--shadow);
-      transition:.2s ease-in-out;
+      padding:.9rem 1rem; border-radius:999px; background:var(--panel); color:var(--fg);
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem; font-weight:700; box-shadow:var(--shadow);
+      min-height:44px; /* tamaño táctil mínimo */
+      transition: transform .18s ease, box-shadow .18s ease;
+      width:auto;
     }
+    .btn.block{ width:100% } /* utilidad para pantallas pequeñas */
     .btn:hover{ transform:translateY(-1px) scale(1.01) }
     .btn:focus-visible{ outline:none; box-shadow:0 0 0 4px var(--ring) }
     .btn.primary{ background:linear-gradient(180deg, var(--primary-500), var(--primary-600)); color:white; border-color:transparent }
@@ -75,112 +89,122 @@
 
     .chip{
       display:inline-flex; align-items:center; gap:.5rem;
-      padding:.35rem .6rem; border-radius:999px; font-size:.75rem; font-weight:600;
+      padding:.3rem .55rem; border-radius:999px; font-size:.78rem; font-weight:700;
       background: color-mix(in oklab, var(--primary-100) 60%, white);
       color: color-mix(in oklab, var(--primary-700) 85%, black);
       border:1px solid var(--border);
     }
 
-    section{ padding:72px 0 }
+    section{ padding: var(--space-section) 0 }
     .muted{ color:var(--muted) }
-    .h1{ font-size: clamp(2rem, 1.2rem + 3vw, 3.2rem); line-height:1.1; letter-spacing:-.02em }
-    .h2{ font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem); line-height:1.2 }
-    .lead{ font-size:clamp(1rem, .9rem + .8vw, 1.2rem); color:var(--muted) }
+    .h1{ font-size: clamp(1.6rem, 1.2rem + 4vw, 3rem); line-height:1.15; letter-spacing:-.02em }
+    .h2{ font-size: clamp(1.2rem, 1rem + 2.2vw, 1.9rem); line-height:1.2 }
+    .lead{ font-size:clamp(1rem, .96rem + 1.2vw, 1.2rem); color:var(--muted) }
 
     .card{
       background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
-      padding:24px; box-shadow:var(--shadow);
+      padding:20px; box-shadow:var(--shadow);
     }
-    .card:hover{ transform:translateY(-2px); transition:transform .18s ease }
+    .card:hover{ transform:translateY(-1px); transition:transform .18s ease }
 
     .icon{
-      width:44px; height:44px; display:inline-grid; place-items:center; border-radius:12px;
+      width:40px; height:40px; display:inline-grid; place-items:center; border-radius:12px;
       background: color-mix(in oklab, var(--accent-100) 50%, white);
-      border:1px solid var(--border)
+      border:1px solid var(--border);
+      font-size:1.1rem;
     }
 
     /* =========
-       Header pegajoso
+       Header (mobile-first)
        ========= */
     header{
       position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
-      background: color-mix(in oklab, var(--bg) 75%, rgba(255,255,255,.4));
+      background: color-mix(in oklab, var(--bg) 85%, rgba(255,255,255,.4));
       border-bottom:1px solid var(--border);
     }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between; gap:16px; height:64px
-    }
-    .brand{ display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.2px }
-    .brand-badge{ width:26px; height:26px; border-radius:6px; background:linear-gradient(135deg, var(--primary-500), var(--accent-500)) }
+    .nav{ display:flex; align-items:center; justify-content:space-between; gap:12px; height:56px }
+    .brand{ display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.2px; font-size:1rem }
+    .brand-badge{ width:22px; height:22px; border-radius:6px; background:linear-gradient(135deg, var(--primary-500), var(--accent-500)) }
 
-    nav ul{ list-style:none; display:flex; gap:14px; padding:0; margin:0 }
-    nav a{ padding:.5rem .75rem; border-radius:10px; font-weight:600; color:var(--muted) }
+    nav ul{ list-style:none; display:flex; gap:10px; padding:0; margin:0 }
+    nav a{ padding:.6rem .75rem; border-radius:10px; font-weight:600; color:var(--muted) }
     nav a.active{ color:var(--fg); background: color-mix(in oklab, var(--primary-50) 65%, white) }
-    .menu-toggle{ display:none }
 
-    /* mobile nav */
-    @media (max-width: 860px){
-      nav{ position:fixed; inset:64px 0 auto 0; background:var(--bg); border-bottom:1px solid var(--border); transform:translateY(-100%); transition:.25s ease; }
-      nav.open{ transform:translateY(0) }
-      nav ul{ flex-direction:column; padding:16px }
-      .menu-toggle{ display:inline-flex }
+    /* Menú móvil: visible por defecto el toggle */
+    .menu-toggle{ display:inline-flex }
+    nav{ position:fixed; inset:56px 0 auto 0; background:var(--bg); border-bottom:1px solid var(--border);
+         transform:translateY(-100%); transition:transform .22s ease; }
+    nav.open{ transform:translateY(0) }
+    nav ul{ flex-direction:column; padding:14px }
+    /* Desktop: restaurar navegación inline */
+    @media (min-width: 860px){
+      .nav{ height:64px }
+      .menu-toggle{ display:none }
+      nav{ position:static; transform:none; background:transparent; border:0 }
+      nav ul{ flex-direction:row; padding:0 }
     }
 
     /* =========
-       Secciones
+       Secciones (mobile-first)
        ========= */
     .hero{
-      display:grid; align-items:center;
-      grid-template-columns: 1.1fr .9fr;
-      gap:32px;
-      padding-top:48px;
+      display:grid; gap:20px; align-items:center; padding-top:10px; /* 1 columna en móvil */
+      grid-template-columns: 1fr;
     }
     .hero-ill{
       aspect-ratio: 4/3;
       border-radius:var(--radius);
       border:1px solid var(--border);
       background:
-        radial-gradient(400px 200px at 20% 0%, color-mix(in oklab, var(--primary-400) 20%, transparent), transparent),
-        radial-gradient(300px 180px at 100% 100%, color-mix(in oklab, var(--accent-400) 18%, transparent), transparent),
+        radial-gradient(260px 140px at 20% 0%, color-mix(in oklab, var(--primary-400) 16%, transparent), transparent),
+        radial-gradient(240px 120px at 100% 100%, color-mix(in oklab, var(--accent-400) 14%, transparent), transparent),
         linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, transparent), var(--panel));
       box-shadow: var(--shadow);
-      display:grid; place-items:center;
-      color:var(--muted);
-      font-weight:600;
+      display:grid; place-items:center; color:var(--muted); font-weight:600;
     }
-    @media (max-width: 980px){
-      .hero{ grid-template-columns: 1fr; padding-top:20px }
+    /* Desde 980px: 2 columnas en hero */
+    @media (min-width: 980px){
+      .hero{ grid-template-columns: 1.1fr .9fr; padding-top:48px; gap:32px }
     }
 
-    .features{ grid-template-columns: repeat(3,1fr) }
-    .stats{ grid-template-columns: repeat(4,1fr) }
-    .pricing{ grid-template-columns: repeat(3,1fr) }
+    /* Features / Stats / Pricing: 1 col -> 2/3 cols progresivo */
+    .features{ grid-template-columns: 1fr }
+    .stats{ grid-template-columns: 1fr 1fr } /* 2 col en móvil ancho */
+    .pricing{ grid-template-columns: 1fr }
 
-    @media (max-width: 980px){
+    @media (min-width: 560px){
       .features{ grid-template-columns: 1fr 1fr }
-      .stats{ grid-template-columns: 1fr 1fr }
-      .pricing{ grid-template-columns: 1fr }
     }
-    @media (max-width: 560px){
-      .features{ grid-template-columns: 1fr }
-      .stats{ grid-template-columns: 1fr 1fr }
+    @media (min-width: 980px){
+      .features{ grid-template-columns: repeat(3,1fr) }
+      .stats{ grid-template-columns: repeat(4,1fr) }
+      .pricing{ grid-template-columns: repeat(3,1fr) }
     }
 
-    .plan .price{
-      font-size: clamp(1.8rem, 1.2rem + 2vw, 2.4rem);
-      font-weight:800; letter-spacing:-.02em
-    }
+    .plan .price{ font-size: clamp(1.6rem, 1rem + 3.5vw, 2.2rem); font-weight:800; letter-spacing:-.02em }
     .plan .sub{ font-size:.9rem; color:var(--muted) }
 
-    .faq details{
-      border:1px solid var(--border); border-radius:14px; padding:16px 18px; background:var(--panel)
-    }
+    .faq details{ border:1px solid var(--border); border-radius:14px; padding:14px 16px; background:var(--panel) }
     .faq summary{ font-weight:700; cursor:pointer }
     .faq details[open]{ box-shadow:var(--shadow) }
 
-    footer{ padding:36px 0; border-top:1px solid var(--border); color:var(--muted) }
+    footer{ padding:28px 0; border-top:1px solid var(--border); color:var(--muted) }
 
-    /* Respeta accesibilidad de movimiento */
+    /* Formulario (mobile-first) */
+    form :where(input, textarea){ width:100% }
+
+    /* Layout de FAQ y Contacto: 1 col -> 2 col */
+    .faq-grid{ display:grid; grid-template-columns:1fr; gap:12px }
+    @media (min-width: 900px){ .faq-grid{ grid-template-columns:1fr 1fr } }
+
+    .contact-grid{ display:grid; grid-template-columns:1fr; gap:16px }
+    @media (min-width: 900px){ .contact-grid{ grid-template-columns: 1.1fr .9fr } }
+
+    /* Ajustes de secciones en pantallas grandes */
+    @media (min-width: 768px){ section{ padding:60px 0 } }
+    @media (min-width: 1140px){ section{ padding:72px 0 } }
+
+    /* Accesibilidad de movimiento */
     @media (prefers-reduced-motion: reduce){
       *{ animation:none !important; transition:none !important; scroll-behavior:auto }
     }
@@ -209,6 +233,7 @@
 
       <div style="display:flex; gap:.5rem; align-items:center">
         <button class="btn ghost" id="themeBtn" aria-pressed="false" title="Cambiar tema">Tema</button>
+        <!-- En móvil puedes hacer los CTA block si quieres -->
         <a href="#contacto" class="btn primary">Empezar</a>
       </div>
     </div>
@@ -221,18 +246,18 @@
         <span class="chip">Ejemplo</span>
         <h1 class="h1" style="margin:.6rem 0 1rem">Título de ejemplo atractivo</h1>
         <p class="lead">Texto demostrativo y genérico para una propuesta clara. Este copy es solo de muestra y puede reemplazarse por el mensaje que se requiera.</p>
-        <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.2rem">
-          <a class="btn primary" href="#precios">Ver planes</a>
-          <a class="btn" href="#caracteristicas">Cómo funciona</a>
+        <div class="grid" style="grid-template-columns:1fr; margin-top:1rem">
+          <a class="btn primary block" href="#precios">Ver planes</a>
+          <a class="btn block" href="#caracteristicas">Cómo funciona</a>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(3,auto); gap:12px; margin-top:18px; align-items:center">
-          <div class="muted" style="font-size:.9rem">Sin costo de ejemplo</div>
-          <div class="muted" style="font-size:.9rem">Entrega demostrativa</div>
-          <div class="muted" style="font-size:.9rem">Soporte ficticio</div>
+        <div style="display:grid; grid-template-columns:1fr; gap:8px; margin-top:14px">
+          <div class="muted" style="font-size:.95rem">Sin costo de ejemplo</div>
+          <div class="muted" style="font-size:.95rem">Entrega demostrativa</div>
+          <div class="muted" style="font-size:.95rem">Soporte ficticio</div>
         </div>
       </div>
       <div class="hero-ill" aria-hidden="true">
-        <svg viewBox="0 0 400 300" width="85%" height="85%">
+        <svg viewBox="0 0 400 300" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="g1" x1="0" x2="1">
               <stop offset="0" stop-color="var(--primary-500)"/>
@@ -258,16 +283,15 @@
   <!-- ================= Features ================= -->
   <section id="caracteristicas">
     <div class="container">
-      <div style="display:flex; align-items:end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px">
+      <div style="display:grid; gap:8px; margin-bottom:16px">
         <div>
           <h2 class="h2">Características de ejemplo</h2>
           <p class="muted">Lista genérica para ilustrar secciones y bloques.</p>
         </div>
-        <a class="btn ghost" href="#faq">Ver preguntas</a>
+        <div><a class="btn ghost" href="#faq">Ver preguntas</a></div>
       </div>
 
       <div class="grid features">
-        <!-- feature -->
         <article class="card">
           <div class="icon" aria-hidden="true">⚡</div>
           <h3 style="margin:.6rem 0 .2rem">Rendimiento demo</h3>
@@ -305,8 +329,8 @@
         </article>
       </div>
 
-      <!-- Stats cortas -->
-      <div class="grid stats" style="margin-top:26px">
+      <!-- Stats (ya 2 col en móvil ancho; 4 en desktop) -->
+      <div class="grid stats" style="margin-top:22px">
         <div class="card" style="text-align:center"><div class="h2">10K+</div><div class="muted">Usuarios demo</div></div>
         <div class="card" style="text-align:center"><div class="h2">2K+</div><div class="muted">Entregas muestra</div></div>
         <div class="card" style="text-align:center"><div class="h2">5+</div><div class="muted">Años ejemplo</div></div>
@@ -318,13 +342,12 @@
   <!-- ================= Pricing ================= -->
   <section id="precios">
     <div class="container">
-      <div style="text-align:center; margin-bottom:20px">
+      <div style="text-align:center; margin-bottom:16px">
         <h2 class="h2">Planes de ejemplo</h2>
         <p class="muted">Precios orientativos en MXN y USD (solo demostración).</p>
       </div>
 
       <div class="grid pricing">
-        <!-- Básico -->
         <article class="card plan">
           <h3 class="h3" style="margin:0 0 .4rem">Básico</h3>
           <p class="muted" style="margin:0 0 1rem">Para comenzar con lo esencial.</p>
@@ -335,10 +358,9 @@
             <li>Sección ilustrativa 2</li>
             <li>Soporte genérico</li>
           </ul>
-          <a class="btn primary" href="#contacto">Elegir</a>
+          <a class="btn primary block" href="#contacto">Elegir</a>
         </article>
 
-        <!-- Intermedio -->
         <article class="card plan" style="border-color:transparent; background:
           linear-gradient(180deg, color-mix(in oklab, var(--primary-500) 18%, var(--panel)), var(--panel));">
           <div class="chip" style="background: color-mix(in oklab, var(--secondary-100) 60%, white); color: var(--secondary-800)">Recomendado</div>
@@ -351,10 +373,9 @@
             <li>Bloques extra de muestra</li>
             <li>Atención prioritaria</li>
           </ul>
-          <a class="btn primary" href="#contacto">Elegir</a>
+          <a class="btn primary block" href="#contacto">Elegir</a>
         </article>
 
-        <!-- Avanzado -->
         <article class="card plan">
           <h3 class="h3" style="margin:0 0 .4rem">Avanzado</h3>
           <p class="muted" style="margin:0 0 1rem">Para una demo completa.</p>
@@ -365,7 +386,7 @@
             <li>Integraciones ficticias</li>
             <li>Soporte extendido</li>
           </ul>
-          <a class="btn primary" href="#contacto">Elegir</a>
+          <a class="btn primary block" href="#contacto">Elegir</a>
         </article>
       </div>
     </div>
@@ -373,13 +394,13 @@
 
   <!-- ================= CTA ================= -->
   <section>
-    <div class="container card" style="display:grid; align-items:center; gap:14px; grid-template-columns: 1fr auto; background:
+    <div class="container card" style="display:grid; align-items:center; gap:12px; grid-template-columns: 1fr; background:
       linear-gradient(120deg, color-mix(in oklab, var(--accent-100) 60%, white), var(--panel));">
       <div>
         <h3 class="h2" style="margin:0 0 .3rem">¿Listo para una demo de ejemplo?</h3>
         <p class="muted" style="margin:0">Llamado a la acción genérico, adaptable a cualquier caso.</p>
       </div>
-      <a class="btn primary" href="#contacto">Solicitar muestra</a>
+      <a class="btn primary block" href="#contacto">Solicitar muestra</a>
     </div>
   </section>
 
@@ -387,7 +408,7 @@
   <section id="faq">
     <div class="container">
       <h2 class="h2" style="margin-bottom:12px">Preguntas frecuentes</h2>
-      <div class="grid" style="grid-template-columns: 1fr 1fr">
+      <div class="faq-grid">
         <div class="faq grid" style="gap:12px">
           <details>
             <summary>¿El contenido es definitivo?</summary>
@@ -415,11 +436,11 @@
   <!-- ================= Contacto ================= -->
   <section id="contacto">
     <div class="container">
-      <div class="grid" style="grid-template-columns: 1.1fr .9fr">
+      <div class="contact-grid">
         <form class="card" onsubmit="event.preventDefault()">
           <h3 class="h2" style="margin-top:0">Contacto de ejemplo</h3>
           <p class="muted">Formulario no funcional, pensado como referencia visual.</p>
-          <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px; margin-top:14px">
+          <div class="grid" style="grid-template-columns:1fr; gap:12px; margin-top:14px">
             <label class="grid" style="gap:6px">
               <span>Nombre</span>
               <input type="text" placeholder="Nombre de ejemplo" required
@@ -430,15 +451,15 @@
               <input type="email" placeholder="correo@ejemplo.com" required
                 style="padding:.75rem .9rem; border-radius:12px; border:1px solid var(--border); background:var(--panel); color:var(--fg)" />
             </label>
-            <label class="grid" style="gap:6px; grid-column:1/-1">
+            <label class="grid" style="gap:6px">
               <span>Mensaje</span>
               <textarea rows="5" placeholder="Escribe tu texto de muestra aquí"
                 style="padding:.75rem .9rem; border-radius:12px; border:1px solid var(--border); background:var(--panel); color:var(--fg)"></textarea>
             </label>
           </div>
-          <div style="display:flex; gap:.6rem; margin-top:14px">
-            <button class="btn primary" type="submit">Enviar</button>
-            <button class="btn ghost" type="reset">Limpiar</button>
+          <div class="grid" style="grid-template-columns:1fr; gap:.6rem; margin-top:14px">
+            <button class="btn primary block" type="submit">Enviar</button>
+            <button class="btn ghost block" type="reset">Limpiar</button>
           </div>
         </form>
 
@@ -450,7 +471,7 @@
             <li>Horario demostrativo</li>
             <li>Teléfono de muestra</li>
           </ul>
-          <div style="height:180px; margin-top:14px; border-radius:12px; border:1px solid var(--border); background:
+          <div style="height:160px; margin-top:14px; border-radius:12px; border:1px solid var(--border); background:
             repeating-linear-gradient(45deg, color-mix(in oklab, var(--primary-50) 60%, white) 0 12px, transparent 12px 24px)"></div>
         </aside>
       </div>
@@ -493,7 +514,7 @@
       themeBtn.setAttribute('aria-pressed', current === 'dark');
     });
 
-    // Scrollspy ligero
+    // Scrollspy ligero (tolerante a móviles)
     const links = document.querySelectorAll('.navlink');
     const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
     const onScroll = () => {
@@ -507,7 +528,7 @@
     document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Cierra menú al seleccionar
+    // Cierra menú al seleccionar (mejor UX móvil)
     links.forEach(a => a.addEventListener('click', ()=> nav.classList.remove('open')));
   </script>
 </body>
