@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Landing — Ejemplo Sencillo</title>
+  <meta name="description" content="Página de ejemplo genérica sin sesgo de industria." />
+  <style>
+    /* =========
+       Diseño base con variables (paleta primaria / secundaria / acento)
+       Colores tomados como ejemplo de una paleta azul/verde
+       ========= */
+    :root{
+      /* Primary (azules) */
+      --primary-50:#e5ebff; --primary-100:#ccd7ff; --primary-200:#99afff;
+      --primary-300:#6687ff; --primary-400:#335fff; --primary-500:#0037ff;
+      --primary-600:#002ccc; --primary-700:#002199; --primary-800:#001666; --primary-900:#000b33; --primary-950:#00061a;
+      /* Secondary (verdes) */
+      --secondary-50:#e7fdf1; --secondary-100:#d0fbe3; --secondary-200:#a1f7c6;
+      --secondary-300:#71f4aa; --secondary-400:#42f08d; --secondary-500:#13ec71;
+      --secondary-600:#0fbd5a; --secondary-700:#0b8e44; --secondary-800:#085e2d; --secondary-900:#042f17; --secondary-950:#02180b;
+      /* Accent (cyan) */
+      --accent-50:#e5faff; --accent-100:#ccf5ff; --accent-200:#99ebff;
+      --accent-300:#66e0ff; --accent-400:#33d6ff; --accent-500:#00ccff;
+      --accent-600:#00a3cc; --accent-700:#007a99; --accent-800:#005266; --accent-900:#002933; --accent-950:#00141a;
+
+      --bg: #ffffff;
+      --fg: #0f172a;            /* slate-900 aprox */
+      --muted: #475569;         /* slate-600 aprox */
+      --panel: #ffffff;
+      --border: rgba(15,23,42,.08);
+      --ring: color-mix(in oklab, var(--primary-500) 70%, white);
+      --shadow: 0 10px 30px rgba(2,6,23,.08);
+      --radius: 16px;
+
+      --container: 1100px;
+    }
+    [data-theme="dark"]{
+      --bg:#0b1020;
+      --fg:#e5e7eb;
+      --muted:#a1a1aa;
+      --panel:#0f162c;
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    /* =========
+       Reset y utilidades mínimas
+       ========= */
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, "Noto Sans", "Helvetica Neue", "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--fg); background:
+        radial-gradient(800px 400px at 10% -5%, color-mix(in oklab, var(--accent-400) 12%, transparent) , transparent),
+        radial-gradient(600px 300px at 110% 110%, color-mix(in oklab, var(--primary-400) 12%, transparent) , transparent),
+        var(--bg);
+      line-height:1.6;
+      scroll-behavior:smooth;
+    }
+    img{ max-width:100%; display:block }
+    a{ color:inherit; text-decoration:none }
+    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:20px }
+    .grid{ display:grid; gap:20px }
+    .btn{
+      appearance:none; border:1px solid var(--border);
+      padding:.75rem 1rem; border-radius:999px; background:var(--panel); color:var(--fg);
+      display:inline-flex; align-items:center; gap:.5rem; font-weight:600; box-shadow:var(--shadow);
+      transition:.2s ease-in-out;
+    }
+    .btn:hover{ transform:translateY(-1px) scale(1.01) }
+    .btn:focus-visible{ outline:none; box-shadow:0 0 0 4px var(--ring) }
+    .btn.primary{ background:linear-gradient(180deg, var(--primary-500), var(--primary-600)); color:white; border-color:transparent }
+    .btn.ghost{ background:transparent; border-color:var(--border) }
+
+    .chip{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.35rem .6rem; border-radius:999px; font-size:.75rem; font-weight:600;
+      background: color-mix(in oklab, var(--primary-100) 60%, white);
+      color: color-mix(in oklab, var(--primary-700) 85%, black);
+      border:1px solid var(--border);
+    }
+
+    section{ padding:72px 0 }
+    .muted{ color:var(--muted) }
+    .h1{ font-size: clamp(2rem, 1.2rem + 3vw, 3.2rem); line-height:1.1; letter-spacing:-.02em }
+    .h2{ font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem); line-height:1.2 }
+    .lead{ font-size:clamp(1rem, .9rem + .8vw, 1.2rem); color:var(--muted) }
+
+    .card{
+      background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+      padding:24px; box-shadow:var(--shadow);
+    }
+    .card:hover{ transform:translateY(-2px); transition:transform .18s ease }
+
+    .icon{
+      width:44px; height:44px; display:inline-grid; place-items:center; border-radius:12px;
+      background: color-mix(in oklab, var(--accent-100) 50%, white);
+      border:1px solid var(--border)
+    }
+
+    /* =========
+       Header pegajoso
+       ========= */
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 75%, rgba(255,255,255,.4));
+      border-bottom:1px solid var(--border);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between; gap:16px; height:64px
+    }
+    .brand{ display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.2px }
+    .brand-badge{ width:26px; height:26px; border-radius:6px; background:linear-gradient(135deg, var(--primary-500), var(--accent-500)) }
+
+    nav ul{ list-style:none; display:flex; gap:14px; padding:0; margin:0 }
+    nav a{ padding:.5rem .75rem; border-radius:10px; font-weight:600; color:var(--muted) }
+    nav a.active{ color:var(--fg); background: color-mix(in oklab, var(--primary-50) 65%, white) }
+    .menu-toggle{ display:none }
+
+    /* mobile nav */
+    @media (max-width: 860px){
+      nav{ position:fixed; inset:64px 0 auto 0; background:var(--bg); border-bottom:1px solid var(--border); transform:translateY(-100%); transition:.25s ease; }
+      nav.open{ transform:translateY(0) }
+      nav ul{ flex-direction:column; padding:16px }
+      .menu-toggle{ display:inline-flex }
+    }
+
+    /* =========
+       Secciones
+       ========= */
+    .hero{
+      display:grid; align-items:center;
+      grid-template-columns: 1.1fr .9fr;
+      gap:32px;
+      padding-top:48px;
+    }
+    .hero-ill{
+      aspect-ratio: 4/3;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      background:
+        radial-gradient(400px 200px at 20% 0%, color-mix(in oklab, var(--primary-400) 20%, transparent), transparent),
+        radial-gradient(300px 180px at 100% 100%, color-mix(in oklab, var(--accent-400) 18%, transparent), transparent),
+        linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, transparent), var(--panel));
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      color:var(--muted);
+      font-weight:600;
+    }
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; padding-top:20px }
+    }
+
+    .features{ grid-template-columns: repeat(3,1fr) }
+    .stats{ grid-template-columns: repeat(4,1fr) }
+    .pricing{ grid-template-columns: repeat(3,1fr) }
+
+    @media (max-width: 980px){
+      .features{ grid-template-columns: 1fr 1fr }
+      .stats{ grid-template-columns: 1fr 1fr }
+      .pricing{ grid-template-columns: 1fr }
+    }
+    @media (max-width: 560px){
+      .features{ grid-template-columns: 1fr }
+      .stats{ grid-template-columns: 1fr 1fr }
+    }
+
+    .plan .price{
+      font-size: clamp(1.8rem, 1.2rem + 2vw, 2.4rem);
+      font-weight:800; letter-spacing:-.02em
+    }
+    .plan .sub{ font-size:.9rem; color:var(--muted) }
+
+    .faq details{
+      border:1px solid var(--border); border-radius:14px; padding:16px 18px; background:var(--panel)
+    }
+    .faq summary{ font-weight:700; cursor:pointer }
+    .faq details[open]{ box-shadow:var(--shadow) }
+
+    footer{ padding:36px 0; border-top:1px solid var(--border); color:var(--muted) }
+
+    /* Respeta accesibilidad de movimiento */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; scroll-behavior:auto }
+    }
+  </style>
+</head>
+<body>
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Principal">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true"></span>
+        <span>Nombre del Sitio</span>
+      </div>
+
+      <button class="btn ghost menu-toggle" aria-expanded="false" aria-controls="mobile-nav">Menú</button>
+
+      <nav id="mobile-nav" aria-label="Secciones">
+        <ul>
+          <li><a href="#inicio" class="navlink">Inicio</a></li>
+          <li><a href="#caracteristicas" class="navlink">Características</a></li>
+          <li><a href="#precios" class="navlink">Precios</a></li>
+          <li><a href="#faq" class="navlink">Preguntas</a></li>
+          <li><a href="#contacto" class="navlink">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div style="display:flex; gap:.5rem; align-items:center">
+        <button class="btn ghost" id="themeBtn" aria-pressed="false" title="Cambiar tema">Tema</button>
+        <a href="#contacto" class="btn primary">Empezar</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= Hero ================= -->
+  <section id="inicio" class="container">
+    <div class="hero">
+      <div>
+        <span class="chip">Ejemplo</span>
+        <h1 class="h1" style="margin:.6rem 0 1rem">Título de ejemplo atractivo</h1>
+        <p class="lead">Texto demostrativo y genérico para una propuesta clara. Este copy es solo de muestra y puede reemplazarse por el mensaje que se requiera.</p>
+        <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.2rem">
+          <a class="btn primary" href="#precios">Ver planes</a>
+          <a class="btn" href="#caracteristicas">Cómo funciona</a>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,auto); gap:12px; margin-top:18px; align-items:center">
+          <div class="muted" style="font-size:.9rem">Sin costo de ejemplo</div>
+          <div class="muted" style="font-size:.9rem">Entrega demostrativa</div>
+          <div class="muted" style="font-size:.9rem">Soporte ficticio</div>
+        </div>
+      </div>
+      <div class="hero-ill" aria-hidden="true">
+        <svg viewBox="0 0 400 300" width="85%" height="85%">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1">
+              <stop offset="0" stop-color="var(--primary-500)"/>
+              <stop offset="1" stop-color="var(--accent-500)"/>
+            </linearGradient>
+          </defs>
+          <rect x="40" y="40" width="320" height="220" rx="16" fill="url(#g1)" opacity=".1" stroke="var(--border)"></rect>
+          <g opacity=".9">
+            <circle cx="100" cy="120" r="22" fill="var(--primary-500)"/>
+            <rect x="140" y="105" width="160" height="10" rx="5" fill="var(--primary-500)"/>
+            <rect x="140" y="125" width="110" height="10" rx="5" fill="var(--primary-300)"/>
+          </g>
+          <g opacity=".9">
+            <circle cx="100" cy="190" r="22" fill="var(--accent-500)"/>
+            <rect x="140" y="175" width="130" height="10" rx="5" fill="var(--accent-500)"/>
+            <rect x="140" y="195" width="150" height="10" rx="5" fill="var(--accent-300)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Features ================= -->
+  <section id="caracteristicas">
+    <div class="container">
+      <div style="display:flex; align-items:end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px">
+        <div>
+          <h2 class="h2">Características de ejemplo</h2>
+          <p class="muted">Lista genérica para ilustrar secciones y bloques.</p>
+        </div>
+        <a class="btn ghost" href="#faq">Ver preguntas</a>
+      </div>
+
+      <div class="grid features">
+        <!-- feature -->
+        <article class="card">
+          <div class="icon" aria-hidden="true">⚡</div>
+          <h3 style="margin:.6rem 0 .2rem">Rendimiento demo</h3>
+          <p class="muted">Descripción corta totalmente sustituible, pensada solo como relleno.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon" aria-hidden="true">🔒</div>
+          <h3 style="margin:.6rem 0 .2rem">Seguridad ejemplo</h3>
+          <p class="muted">Texto de prueba para un punto clave que luego se personaliza.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon" aria-hidden="true">🎯</div>
+          <h3 style="margin:.6rem 0 .2rem">Objetivo claro</h3>
+          <p class="muted">Copia neutral que guía sin limitar el tipo de proyecto.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon" aria-hidden="true">📈</div>
+          <h3 style="margin:.6rem 0 .2rem">Escala flexible</h3>
+          <p class="muted">Sección de muestra con enfoque en crecimiento y cambios.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon" aria-hidden="true">🧩</div>
+          <h3 style="margin:.6rem 0 .2rem">Bloques modulares</h3>
+          <p class="muted">Elementos intercambiables para adaptar fácilmente.</p>
+        </article>
+
+        <article class="card">
+          <div class="icon" aria-hidden="true">✨</div>
+          <h3 style="margin:.6rem 0 .2rem">Interfaz cuidada</h3>
+          <p class="muted">Detalles de UX genéricos y consistentes.</p>
+        </article>
+      </div>
+
+      <!-- Stats cortas -->
+      <div class="grid stats" style="margin-top:26px">
+        <div class="card" style="text-align:center"><div class="h2">10K+</div><div class="muted">Usuarios demo</div></div>
+        <div class="card" style="text-align:center"><div class="h2">2K+</div><div class="muted">Entregas muestra</div></div>
+        <div class="card" style="text-align:center"><div class="h2">5+</div><div class="muted">Años ejemplo</div></div>
+        <div class="card" style="text-align:center"><div class="h2">24/7</div><div class="muted">Soporte ficticio</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Pricing ================= -->
+  <section id="precios">
+    <div class="container">
+      <div style="text-align:center; margin-bottom:20px">
+        <h2 class="h2">Planes de ejemplo</h2>
+        <p class="muted">Precios orientativos en MXN y USD (solo demostración).</p>
+      </div>
+
+      <div class="grid pricing">
+        <!-- Básico -->
+        <article class="card plan">
+          <h3 class="h3" style="margin:0 0 .4rem">Básico</h3>
+          <p class="muted" style="margin:0 0 1rem">Para comenzar con lo esencial.</p>
+          <div class="price">$9,999 <small class="sub">MXN</small></div>
+          <div class="muted" style="margin:.2rem 0 1.2rem">$599 <span class="sub">USD</span></div>
+          <ul class="muted" style="padding-left:1.1rem; margin:0 0 1.1rem; display:grid; gap:.35rem">
+            <li>Sección ilustrativa 1</li>
+            <li>Sección ilustrativa 2</li>
+            <li>Soporte genérico</li>
+          </ul>
+          <a class="btn primary" href="#contacto">Elegir</a>
+        </article>
+
+        <!-- Intermedio -->
+        <article class="card plan" style="border-color:transparent; background:
+          linear-gradient(180deg, color-mix(in oklab, var(--primary-500) 18%, var(--panel)), var(--panel));">
+          <div class="chip" style="background: color-mix(in oklab, var(--secondary-100) 60%, white); color: var(--secondary-800)">Recomendado</div>
+          <h3 class="h3" style="margin:.5rem 0 .4rem">Intermedio</h3>
+          <p class="muted" style="margin:0 0 1rem">Equilibrio entre funciones y valor.</p>
+          <div class="price">$19,999 <small class="sub">MXN</small></div>
+          <div class="muted" style="margin:.2rem 0 1.2rem">$1,199 <span class="sub">USD</span></div>
+          <ul class="muted" style="padding-left:1.1rem; margin:0 0 1.1rem; display:grid; gap:.35rem">
+            <li>Todo lo del Básico ejemplo</li>
+            <li>Bloques extra de muestra</li>
+            <li>Atención prioritaria</li>
+          </ul>
+          <a class="btn primary" href="#contacto">Elegir</a>
+        </article>
+
+        <!-- Avanzado -->
+        <article class="card plan">
+          <h3 class="h3" style="margin:0 0 .4rem">Avanzado</h3>
+          <p class="muted" style="margin:0 0 1rem">Para una demo completa.</p>
+          <div class="price">$34,999 <small class="sub">MXN</small></div>
+          <div class="muted" style="margin:.2rem 0 1.2rem">$2,099 <span class="sub">USD</span></div>
+          <ul class="muted" style="padding-left:1.1rem; margin:0 0 1.1rem; display:grid; gap:.35rem">
+            <li>Secciones avanzadas de ejemplo</li>
+            <li>Integraciones ficticias</li>
+            <li>Soporte extendido</li>
+          </ul>
+          <a class="btn primary" href="#contacto">Elegir</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+  <section>
+    <div class="container card" style="display:grid; align-items:center; gap:14px; grid-template-columns: 1fr auto; background:
+      linear-gradient(120deg, color-mix(in oklab, var(--accent-100) 60%, white), var(--panel));">
+      <div>
+        <h3 class="h2" style="margin:0 0 .3rem">¿Listo para una demo de ejemplo?</h3>
+        <p class="muted" style="margin:0">Llamado a la acción genérico, adaptable a cualquier caso.</p>
+      </div>
+      <a class="btn primary" href="#contacto">Solicitar muestra</a>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq">
+    <div class="container">
+      <h2 class="h2" style="margin-bottom:12px">Preguntas frecuentes</h2>
+      <div class="grid" style="grid-template-columns: 1fr 1fr">
+        <div class="faq grid" style="gap:12px">
+          <details>
+            <summary>¿El contenido es definitivo?</summary>
+            <p class="muted">No, todo es texto de ejemplo y puede reemplazarse sin restricciones.</p>
+          </details>
+          <details>
+            <summary>¿Los enlaces redirigen fuera?</summary>
+            <p class="muted">No, llevan a secciones de esta misma página o sirven como placeholders.</p>
+          </details>
+        </div>
+        <div class="faq grid" style="gap:12px">
+          <details>
+            <summary>¿Se puede cambiar la paleta?</summary>
+            <p class="muted">Sí, las variables CSS permiten ajustar colores de forma centralizada.</p>
+          </details>
+          <details>
+            <summary>¿Incluye integraciones reales?</summary>
+            <p class="muted">No, esta es una plantilla demostrativa sin dependencias.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Contacto ================= -->
+  <section id="contacto">
+    <div class="container">
+      <div class="grid" style="grid-template-columns: 1.1fr .9fr">
+        <form class="card" onsubmit="event.preventDefault()">
+          <h3 class="h2" style="margin-top:0">Contacto de ejemplo</h3>
+          <p class="muted">Formulario no funcional, pensado como referencia visual.</p>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px; margin-top:14px">
+            <label class="grid" style="gap:6px">
+              <span>Nombre</span>
+              <input type="text" placeholder="Nombre de ejemplo" required
+                style="padding:.75rem .9rem; border-radius:12px; border:1px solid var(--border); background:var(--panel); color:var(--fg)" />
+            </label>
+            <label class="grid" style="gap:6px">
+              <span>Correo</span>
+              <input type="email" placeholder="correo@ejemplo.com" required
+                style="padding:.75rem .9rem; border-radius:12px; border:1px solid var(--border); background:var(--panel); color:var(--fg)" />
+            </label>
+            <label class="grid" style="gap:6px; grid-column:1/-1">
+              <span>Mensaje</span>
+              <textarea rows="5" placeholder="Escribe tu texto de muestra aquí"
+                style="padding:.75rem .9rem; border-radius:12px; border:1px solid var(--border); background:var(--panel); color:var(--fg)"></textarea>
+            </label>
+          </div>
+          <div style="display:flex; gap:.6rem; margin-top:14px">
+            <button class="btn primary" type="submit">Enviar</button>
+            <button class="btn ghost" type="reset">Limpiar</button>
+          </div>
+        </form>
+
+        <aside class="card">
+          <h3 class="h2" style="margin-top:0">Información genérica</h3>
+          <p class="muted">Datos ficticios de referencia. Sustituir por información real cuando corresponda.</p>
+          <ul class="muted" style="padding-left:1.1rem; display:grid; gap:.35rem">
+            <li>Dirección de ejemplo</li>
+            <li>Horario demostrativo</li>
+            <li>Teléfono de muestra</li>
+          </ul>
+          <div style="height:180px; margin-top:14px; border-radius:12px; border:1px solid var(--border); background:
+            repeating-linear-gradient(45deg, color-mix(in oklab, var(--primary-50) 60%, white) 0 12px, transparent 12px 24px)"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Footer ================= -->
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+      <div>© <span id="year"></span> Nombre del Sitio — Plantilla de ejemplo</div>
+      <div style="display:flex; gap:10px">
+        <a href="#inicio">Arriba</a>
+        <a href="#">Aviso</a>
+        <a href="#">Privacidad</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año automático
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Theme toggle con persistencia
+    const themeBtn = document.getElementById('themeBtn');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved){ root.setAttribute('data-theme', saved); themeBtn.setAttribute('aria-pressed', saved === 'dark'); }
+    themeBtn.addEventListener('click', ()=>{
+      const current = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', current);
+      localStorage.setItem('theme', current);
+      themeBtn.setAttribute('aria-pressed', current === 'dark');
+    });
+
+    // Scrollspy ligero
+    const links = document.querySelectorAll('.navlink');
+    const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const onScroll = () => {
+      const y = window.scrollY + 90;
+      let activeId = '';
+      for(const sec of sections){
+        if(sec.offsetTop <= y) activeId = '#' + sec.id;
+      }
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeId));
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Cierra menú al seleccionar
+    links.forEach(a => a.addEventListener('click', ()=> nav.classList.remove('open')));
+  </script>
+</body>
+</html>

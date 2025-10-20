@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bufete — Plantilla Legal Profesional</title>
+  <meta name="description" content="Plantilla sobria y formal orientada a abogados/as independientes o despachos boutique." />
+  <style>
+    /* =============================
+       Estilo formal / legal — claro
+       ============================= */
+    :root{
+      /* Marca (azul marino + dorado sobrio) */
+      --navy-50:#eef2f7; --navy-100:#dfe6f0; --navy-200:#c6d0df; --navy-300:#a5b4c7;
+      --navy-400:#7a8ba4; --navy-500:#4a5b74; --navy-600:#2e3c53; --navy-700:#223045; --navy-800:#1a2638; --navy-900:#121a27;
+      --gold-50:#faf6eb; --gold-200:#e9dcc0; --gold-400:#c7a968; --gold-500:#b8924a; --gold-700:#8a6b32;
+
+      --bg:#ffffff;            /* fondo principal */
+      --panel:#ffffff;         /* superficies */
+      --ink:#111827;           /* texto principal (slate-900) */
+      --muted:#4b5563;         /* texto secundario */
+      --rule:#e5e7eb;          /* división sutil */
+      --brand:var(--navy-800);
+      --accent:var(--gold-500);
+      --accent-weak:var(--gold-50);
+      --shadow:0 8px 28px rgba(0,0,0,.06);
+      --radius:12px;
+      --container:1120px;
+      --lh:1.58;
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, "Noto Sans";
+      line-height:var(--lh); -webkit-font-smoothing:antialiased;
+    }
+    .serif{ font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace }
+    a{ color:inherit; text-decoration:none }
+    img{ max-width:100%; display:block }
+    .container{ max-width:var(--container); margin-inline:auto; padding-inline:22px; width:100% }
+    section{ padding:68px 0 }
+
+    .h1{ font-size: clamp(2rem, 1.2rem + 2.6vw, 3rem); line-height:1.12; letter-spacing:-.01em }
+    .h2{ font-size: clamp(1.35rem, 1rem + 1.3vw, 1.9rem); line-height:1.18 }
+    .lead{ font-size: clamp(1rem, .95rem + .6vw, 1.12rem); color:var(--muted) }
+
+    .btn{ appearance:none; border:1px solid var(--navy-200); background:#fff; color:var(--brand); padding:.72rem 1rem; border-radius:10px; font-weight:700; display:inline-flex; align-items:center; gap:.55rem; transition:.18s }
+    .btn:hover{ transform: translateY(-1px) }
+    .btn:focus-visible{ outline:none; box-shadow:0 0 0 4px color-mix(in oklab, var(--accent) 30%, white) }
+    .btn.primary{ background:linear-gradient(180deg, var(--brand), #111a2a); color:#fff; border-color:transparent }
+    .btn.ghost{ background:transparent }
+
+    .chip{ display:inline-flex; align-items:center; gap:.5rem; padding:.28rem .55rem; border:1px solid var(--gold-200); border-radius:999px; background:var(--accent-weak); color:var(--brand); font-weight:700; font-size:.8rem }
+
+    .card{ background:var(--panel); border:1px solid var(--rule); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px }
+
+    header{ position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(6px); background:color-mix(in oklab, var(--bg) 85%, white); border-bottom:1px solid var(--rule) }
+    .nav{ height:70px; display:flex; align-items:center; justify-content:space-between; gap:16px }
+    .brand{ display:flex; align-items:center; gap:.7rem; font-weight:900; letter-spacing:.4px; color:var(--brand) }
+    .crest{ width:28px; height:28px; border-radius:6px; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg, var(--brand), #0e1522) }
+    .crest::before{ content:"⚖️" }
+
+    nav ul{ list-style:none; padding:0; margin:0; display:flex; gap:6px }
+    nav a{ padding:.45rem .7rem; border-radius:8px; color:var(--muted); font-weight:600 }
+    nav a.active{ color:var(--brand); background:var(--navy-50) }
+    .menu-toggle{ display:none }
+    @media (max-width: 880px){
+      nav{ position:fixed; inset:70px 0 auto 0; background:var(--panel); border-bottom:1px solid var(--rule); transform:translateY(-100%); transition:.22s }
+      nav.open{ transform:translateY(0) }
+      nav ul{ flex-direction:column; padding:14px }
+      .menu-toggle{ display:inline-flex }
+    }
+
+    /* Hero / portada */
+    .hero{ display:grid; grid-template-columns: 1.05fr .95fr; align-items:center; gap:32px; padding:28px 0 }
+    .portrait{ aspect-ratio: 4/5; border-radius:14px; border:1px solid var(--rule); background:linear-gradient(180deg, #f8fafc, #fff); display:grid; place-items:center; color:var(--muted) }
+    @media (max-width: 980px){ .hero{ grid-template-columns:1fr } }
+
+    /* Secciones grid */
+    .areas{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
+    .two{ display:grid; grid-template-columns:1.1fr .9fr; gap:20px }
+    @media (max-width: 980px){ .areas{ grid-template-columns:1fr 1fr } .two{ grid-template-columns:1fr } }
+    @media (max-width: 560px){ .areas{ grid-template-columns:1fr } }
+
+    .section-head{ display:flex; align-items:end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px }
+
+    /* Listas / tablas */
+    .list{ padding-left:1.1rem; display:grid; gap:.35rem; color:var(--muted) }
+    .timeline{ border-left:2px solid var(--navy-100); padding-left:14px; display:grid; gap:12px }
+    .timeline .item{ position:relative }
+    .timeline .item::before{ content:""; position:absolute; left:-20px; top:.45rem; width:10px; height:10px; border-radius:50%; background:var(--accent) }
+
+    table{ width:100%; border-collapse:collapse; font-size:.98rem }
+    th,td{ padding:12px 10px; text-align:left; vertical-align:top }
+    thead th{ border-bottom:2px solid var(--rule); color:var(--brand); font-weight:800 }
+    tbody tr + tr td{ border-top:1px solid var(--rule) }
+
+    footer{ border-top:1px solid var(--rule); color:var(--muted); padding:32px 0 }
+
+    /* Impresión básica (para PDFs de perfil) */
+    @media print{
+      header, footer, .no-print{ display:none }
+      section{ padding:18px 0 }
+      .card{ box-shadow:none }
+    }
+  </style>
+</head>
+<body>
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Principal">
+      <div class="brand">
+        <span class="crest" aria-hidden="true"></span>
+        <span>Abogado /a — Apellido & Asociados</span>
+      </div>
+      <button class="btn ghost menu-toggle" aria-expanded="false" aria-controls="mobile-nav" title="Abrir menú">Menú</button>
+      <nav id="mobile-nav" aria-label="Secciones">
+        <ul>
+          <li><a href="#inicio" class="navlink">Inicio</a></li>
+          <li><a href="#servicios" class="navlink">Áreas</a></li>
+          <li><a href="#perfil" class="navlink">Perfil</a></li>
+          <li><a href="#honorarios" class="navlink">Honorarios</a></li>
+          <li><a href="#contacto" class="navlink">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="no-print" style="display:flex; gap:.5rem; align-items:center">
+        <a class="btn" href="#contacto">Agendar consulta</a>
+        <a class="btn primary" href="#contacto">WhatsApp</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= Hero ================= -->
+  <main id="inicio" class="container">
+    <section class="hero">
+      <div>
+        <span class="chip mono">Cédula profesional 12345678 — Colegiado</span>
+        <h1 class="h1 serif" style="margin:.6rem 0 1rem">Asesoría legal clara y estratégica</h1>
+        <p class="lead">Acompaño a personas y empresas en asuntos civiles, mercantiles y corporativos. Diagnóstico preciso, riesgos medidos y una ruta de acción realista.</p>
+        <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem">
+          <a class="btn primary" href="#contacto">Consulta inicial</a>
+          <a class="btn" href="#servicios">Ver áreas</a>
+        </div>
+      </div>
+      <div class="portrait" aria-hidden="true">
+        <svg viewBox="0 0 320 400" width="84%" height="84%">
+          <rect x="20" y="20" width="280" height="360" rx="12" fill="#f8fafc" stroke="#e5e7eb"/>
+          <circle cx="160" cy="140" r="46" fill="#dfe6f0"/>
+          <rect x="80" y="208" width="160" height="14" rx="7" fill="#c6d0df"/>
+          <rect x="64" y="236" width="192" height="12" rx="6" fill="#c6d0df"/>
+          <rect x="64" y="258" width="192" height="12" rx="6" fill="#c6d0df"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ================= Áreas de práctica ================= -->
+    <section id="servicios">
+      <div class="section-head">
+        <div>
+          <h2 class="h2 serif">Áreas de práctica</h2>
+          <p class="lead">Alcances claros, tiempos definidos y comunicación constante.</p>
+        </div>
+        <a class="btn ghost" href="#contacto">Solicitar propuesta</a>
+      </div>
+      <div class="areas">
+        <article class="card">
+          <h3 style="margin:.2rem 0 .4rem">Civil y familiar</h3>
+          <ul class="list">
+            <li>Contratos civiles</li>
+            <li>Sucesiones y testamentos</li>
+            <li>Sociedades conyugales</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 style="margin:.2rem 0 .4rem">Mercantil</h3>
+          <ul class="list">
+            <li>Controversias mercantiles</li>
+            <li>Títulos de crédito</li>
+            <li>Arbitraje comercial</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 style="margin:.2rem 0 .4rem">Corporativo</h3>
+          <ul class="list">
+            <li>Constitución y gobierno corporativo</li>
+            <li>Due diligence</li>
+            <li>Secretaría corporativa</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= Perfil profesional ================= -->
+    <section id="perfil">
+      <div class="two">
+        <div class="card">
+          <h3 class="h2 serif" style="margin-top:0">Perfil</h3>
+          <p class="lead">Estrategia procesal y preventiva con enfoque en negocio. Trabajo con equipos directivos, representantes legales y personas físicas.</p>
+          <ul class="list" style="margin-top:.8rem">
+            <li>Idiomas: Español / Inglés</li>
+            <li>Actúo en CDMX, Edomex y Jalisco</li>
+            <li>Atención presencial y remota</li>
+          </ul>
+        </div>
+        <aside class="card">
+          <h3 class="h2 serif" style="margin-top:0">Credenciales</h3>
+          <div class="timeline">
+            <div class="item"><strong>LL.B</strong> — Universidad Ejemplo (2012)</div>
+            <div class="item">Maestría en Derecho Corporativo — Univ. Ejemplo (2016)</div>
+            <div class="item">Certificación en Arbitraje Comercial (2019)</div>
+            <div class="item">Colegiado — Barra de Abogados (Vigente)</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= Honorarios ================= -->
+    <section id="honorarios">
+      <h2 class="h2 serif" style="margin-bottom:10px">Honorarios</h2>
+      <p class="lead">Transparencia desde el inicio. Paquetes orientativos; se formaliza en propuesta y contrato de prestación de servicios.</p>
+      <div class="two" style="margin-top:14px">
+        <div class="card">
+          <table aria-label="Tabla de honorarios">
+            <thead>
+              <tr>
+                <th>Servicio</th>
+                <th>Alcance</th>
+                <th class="mono">Cuota</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Consulta inicial</td>
+                <td>45–60 min, diagnóstico y ruta</td>
+                <td>$1,200 MXN</td>
+              </tr>
+              <tr>
+                <td>Contrato a la medida</td>
+                <td>Borrador + 1 ronda de ajustes</td>
+                <td>$6,500 MXN</td>
+              </tr>
+              <tr>
+                <td>Asesoría mensual</td>
+                <td>Hasta 6 horas/mes</td>
+                <td>$8,900 MXN</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="card">
+          <p class="mono" style="margin:0 0 .4rem"><strong>Notas</strong></p>
+          <ul class="list">
+            <li>Impuestos no incluidos.</li>
+            <li>Costas y derechos se cotizan por separado.</li>
+            <li>Se firma NDA y carta de encargo según el caso.</li>
+          </ul>
+          <a class="btn" style="margin-top:10px" href="#contacto">Solicitar cotización</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= Contacto / CTA ================= -->
+    <section id="contacto">
+      <div class="card" style="background:linear-gradient(180deg, var(--accent-weak), #fff)">
+        <div class="two" style="align-items:center">
+          <div>
+            <h3 class="h2 serif" style="margin:0 0 .4rem">Agendar consulta</h3>
+            <p class="lead" style="margin:0 0 .6rem">Comparte el asunto, objetivos y plazos. Respondo en 24–48h hábiles.</p>
+            <form onsubmit="event.preventDefault()" class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
+              <label class="grid" style="gap:6px">
+                <span>Nombre</span>
+                <input required placeholder="Nombre y apellido" style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px" />
+              </label>
+              <label class="grid" style="gap:6px">
+                <span>Correo</span>
+                <input type="email" required placeholder="correo@ejemplo.com" style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px" />
+              </label>
+              <label class="grid" style="gap:6px; grid-column:1/-1">
+                <span>Mensaje</span>
+                <textarea rows="5" placeholder="Resumen del asunto" style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px"></textarea>
+              </label>
+              <div style="grid-column:1/-1; display:flex; gap:.6rem; flex-wrap:wrap">
+                <button class="btn primary" type="submit">Enviar</button>
+                <a class="btn" href="#inicio">Volver arriba</a>
+              </div>
+            </form>
+          </div>
+          <div class="card" style="border-style:dashed">
+            <p class="mono" style="margin:0 0 .4rem"><strong>Datos de contacto</strong></p>
+            <ul class="list">
+              <li>Teléfono: (55) 0000 0000</li>
+              <li>Oficina: CDMX — Polanco</li>
+              <li>Correo: contacto@bufete.mx</li>
+              <li>Atención: Lun–Vie 9:00–18:00 (GMT-6)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p class="mono" style="margin:.8rem 0 0; color:var(--muted)">*La información en este sitio es de carácter informativo y no constituye asesoría legal.</p>
+    </section>
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+      <div>© <span id="year"></span> Apellido & Asociados • Todos los derechos reservados</div>
+      <div style="display:flex; gap:12px">
+        <a href="#" style="color:inherit">Aviso de privacidad</a>
+        <a href="#" style="color:inherit">Términos</a>
+        <a href="#inicio" style="color:inherit">Inicio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año automático
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    if(toggle && nav){
+      toggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    // Scrollspy ligero
+    const links = document.querySelectorAll('.navlink');
+    const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const onScroll = () => {
+      const y = window.scrollY + 90; let activeId = '';
+      for(const sec of sections){ if(sec && sec.offsetTop <= y) activeId = '#' + sec.id; }
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeId));
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+</body>
+</html>

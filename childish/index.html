@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peque Mundo — Plantilla Infantil</title>
+  <meta name="description" content="Plantilla lúdica e infantil: colores pastel, formas suaves, stickers y tipografía grande." />
+  <style>
+    /* =============================
+       Paleta infantil (pastel)
+       ============================= */
+    :root{
+      --bg:#fffaf5;             /* crema cálido */
+      --fg:#243142;             /* azul grisáceo, buen contraste */
+      --muted:#5b6b7c;
+
+      --pink-100:#ffe4ec; --pink-300:#ffb6c9; --pink-500:#ff7fa1;
+      --blue-100:#e3f2ff; --blue-300:#b6dcff; --blue-500:#7bb8ff;
+      --mint-100:#e6fbf4; --mint-300:#bdf3e4; --mint-500:#7ee3ca;
+      --sun-100:#fff6cc; --sun-300:#ffe58a; --sun-500:#ffd148;
+      --lav-100:#eee9ff; --lav-300:#d4c9ff; --lav-500:#b29bff;
+
+      --panel:#ffffff;          /* tarjetas */
+      --border:rgba(36,49,66,.12);
+      --shadow:0 10px 30px rgba(36,49,66,.08);
+      --radius:22px;            /* bien redondeado */
+      --container:1100px;
+    }
+
+    /* =============================
+       Reset básico + tipografía grande
+       ============================= */
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; background:
+        radial-gradient(700px 400px at 110% -80px, var(--blue-100), transparent 70%),
+        radial-gradient(600px 320px at -10% 110%, var(--pink-100), transparent 70%),
+        var(--bg);
+      color:var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+      line-height:1.6;
+      letter-spacing:.2px;
+    }
+
+    a{ color:inherit; text-decoration:none }
+    img{ max-width:100%; display:block }
+    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:20px }
+    .grid{ display:grid; gap:18px }
+
+    .h1{ font-size: clamp(2rem, 1.2rem + 3.5vw, 3.6rem); line-height:1.1; letter-spacing:.5px }
+    .h2{ font-size: clamp(1.4rem, 1rem + 1.6vw, 2.2rem) }
+    .lead{ font-size:clamp(1.05rem, .95rem + .8vw, 1.25rem); color:var(--muted) }
+
+    .btn{
+      display:inline-flex; align-items:center; gap:.6rem;
+      padding:.85rem 1.1rem; border-radius:999px; border:2px solid #0000;
+      font-weight:800; box-shadow:var(--shadow); transform:translateY(0);
+      transition:.18s ease;
+    }
+    .btn:hover{ transform:translateY(-2px) }
+    .btn.sun{ background:var(--sun-300) }
+    .btn.mint{ background:var(--mint-300) }
+    .btn.blue{ background:var(--blue-300) }
+
+    /* Tarjetas tipo sticker */
+    .card{
+      background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+      padding:20px; position:relative; isolation:isolate;
+    }
+    .card::after{
+      content:""; position:absolute; inset:auto -6px -6px auto; width:48px; height:48px; border-radius:12px 0 12px 12px;
+      background: conic-gradient(from 200deg, var(--pink-300), var(--blue-300), var(--mint-300), var(--sun-300), var(--pink-300));
+      filter: blur(10px); opacity:.45; z-index:-1;
+    }
+
+    /* Encabezado con nubes */
+    header{
+      position:relative; overflow:hidden; border-bottom:1px dashed var(--border);
+      background: linear-gradient(0deg, #fff0, #fff8);
+    }
+    .nav{ height:72px; display:flex; align-items:center; justify-content:space-between; gap:16px }
+    .brand{ display:flex; align-items:center; gap:.7rem; font-weight:900; letter-spacing:.6px }
+    .badge{
+      width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:1.1rem;
+      background:linear-gradient(135deg, var(--sun-300), var(--pink-300));
+      box-shadow:var(--shadow)
+    }
+    .menu-toggle{ display:none }
+    nav ul{ list-style:none; display:flex; gap:10px; padding:0; margin:0 }
+    nav a{ padding:.45rem .8rem; border-radius:999px; background:var(--lav-100); font-weight:700 }
+    nav a:hover{ background:var(--lav-300) }
+
+    /* Nubes decorativas */
+    .clouds{ position:absolute; inset:auto 0 -40px 0; height:120px; pointer-events:none; opacity:.8 }
+    .clouds svg{ width:100%; height:100% }
+    .float{ animation: float 6s ease-in-out infinite }
+    @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
+
+    /* Hero con blobs */
+    .hero{ display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:26px; padding:28px 0 10px }
+    .blob{
+      aspect-ratio:1/1; border-radius:40% 60% 60% 40%/55% 45% 55% 45%;
+      background:radial-gradient(60% 60% at 30% 30%, #fff8, #0000), linear-gradient(135deg, var(--mint-300), var(--blue-300));
+      border:1px dashed var(--border); position:relative; display:grid; place-items:center; font-weight:900; color:#213042;
+    }
+    .blob::before{
+      content:"★"; position:absolute; top:10%; left:10%; font-size:24px; color:#f39;
+      transform:rotate(-10deg); opacity:.6
+    }
+    .blob::after{
+      content:"✿"; position:absolute; bottom:12%; right:12%; font-size:22px; color:#f93; opacity:.7
+    }
+
+    /* Secciones */
+    section{ padding:22px 0 }
+
+    /* Módulo de actividades (cards en rejilla) */
+    .features{ grid-template-columns: repeat(3, 1fr) }
+    @media (max-width: 980px){ .hero{ grid-template-columns:1fr } .features{ grid-template-columns:1fr 1fr } }
+    @media (max-width: 560px){ .features{ grid-template-columns:1fr } }
+
+    .tag{ display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .55rem; border-radius:999px; font-weight:800 }
+    .tag.sun{ background:var(--sun-100) }
+    .tag.pink{ background:var(--pink-100) }
+    .tag.mint{ background:var(--mint-100) }
+
+    /* Lista de horarios / precios en tabla simple */
+    table{ width:100%; border-collapse:separate; border-spacing:0 10px }
+    th{ text-align:left; font-size:.95rem; color:var(--muted) }
+    td{ background:var(--panel); border:1px solid var(--border); padding:12px 14px; border-radius:14px }
+
+    /* Footer */
+    footer{ padding:30px 0; border-top:1px dashed var(--border); color:var(--muted) }
+  </style>
+</head>
+<body>
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Principal">
+      <div class="brand">
+        <div class="badge" aria-hidden="true">🐣</div>
+        <span>Peque Mundo</span>
+      </div>
+
+      <button class="btn blue menu-toggle" aria-expanded="false" aria-controls="mobile-nav">Menú</button>
+
+      <nav id="mobile-nav">
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#actividades">Actividades</a></li>
+          <li><a href="#talleres">Talleres</a></li>
+          <li><a href="#inscripcion">Inscripción</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Nubes -->
+    <div class="clouds">
+      <svg viewBox="0 0 1200 200" preserveAspectRatio="none" class="float" aria-hidden="true">
+        <g fill="url(#g1)">
+          <path d="M0,120 C120,140 240,100 360,120 C480,140 600,120 720,130 C840,140 960,100 1080,120 L1200,140 L1200,200 L0,200 Z" opacity=".7"/>
+        </g>
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stop-color="var(--blue-100)"/>
+            <stop offset="1" stop-color="var(--mint-100)"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ================= Hero ================= -->
+  <main id="inicio" class="container">
+    <section class="hero">
+      <div>
+        <h1 class="h1">Aprender jugando, crecer sonriendo</h1>
+        <p class="lead">Un diseño pensado para guarderías, talleres infantiles, campamentos o apps educativas. Colores suaves, formas divertidas y llamados claros para mamás y papás.</p>
+        <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem">
+          <a class="btn sun" href="#inscripcion">Inscribir ahora</a>
+          <a class="btn mint" href="#actividades">Ver actividades</a>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
+          <span class="tag sun">Seguro</span>
+          <span class="tag pink">Lúdico</span>
+          <span class="tag mint">Inclusivo</span>
+        </div>
+      </div>
+      <div class="blob">😊 Ilustración</div>
+    </section>
+
+    <!-- ================= Actividades ================= -->
+    <section id="actividades">
+      <h2 class="h2" style="margin:0 0 .6rem">Actividades favoritas</h2>
+      <p class="lead" style="margin:0 0 1rem">Pequeñas tarjetas tipo sticker para destacar lo mejor.</p>
+      <div class="grid features">
+        <article class="card">
+          <h3 style="margin:.2rem 0 .3rem">Arte y colores</h3>
+          <p class="muted">Pintura con dedos, plastilina y sellos.</p>
+        </article>
+        <article class="card">
+          <h3 style="margin:.2rem 0 .3rem">Música y ritmo</h3>
+          <p class="muted">Instrumentos suaves, canciones y palmas.</p>
+        </article>
+        <article class="card">
+          <h3 style="margin:.2rem 0 .3rem">Ciencia mini</h3>
+          <p class="muted">Experimentos seguros y curiosidad.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= Talleres / Horarios ================= -->
+    <section id="talleres">
+      <h2 class="h2" style="margin:0 0 .6rem">Talleres y horarios</h2>
+      <p class="lead" style="margin:0 0 1rem">Formato simple, legible y alegre.</p>
+      <table aria-label="Tabla de talleres y horarios">
+        <thead>
+          <tr>
+            <th>Taller</th>
+            <th>Edad</th>
+            <th>Horario</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Exploradores de color</td>
+            <td>3–4 años</td>
+            <td>Lun y Mié, 10:00–11:00</td>
+            <td>$450 MXN/mes</td>
+          </tr>
+          <tr>
+            <td>Mini científicos</td>
+            <td>4–5 años</td>
+            <td>Mar y Jue, 11:30–12:30</td>
+            <td>$520 MXN/mes</td>
+          </tr>
+          <tr>
+            <td>Música en movimiento</td>
+            <td>3–6 años</td>
+            <td>Vie, 10:00–11:00</td>
+            <td>$300 MXN/mes</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= Inscripción / CTA ================= -->
+    <section id="inscripcion">
+      <div class="card" style="background:linear-gradient(135deg, var(--sun-100), #fff); border-style:dashed">
+        <div style="display:grid; grid-template-columns:1.1fr .9fr; gap:16px; align-items:center">
+          <div>
+            <h2 class="h2" style="margin:0 0 .5rem">¡Listos para jugar!</h2>
+            <p class="lead" style="margin:0 0 .6rem">Completa el formulario y te contactamos con los pasos.</p>
+            <form onsubmit="event.preventDefault()" class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
+              <label class="grid" style="gap:6px">
+                <span>Nombre del adulto</span>
+                <input required placeholder="Nombre y apellido"
+                  style="padding:.8rem .9rem; border-radius:14px; border:1px solid var(--border)" />
+              </label>
+              <label class="grid" style="gap:6px">
+                <span>Correo</span>
+                <input type="email" required placeholder="correo@ejemplo.com"
+                  style="padding:.8rem .9rem; border-radius:14px; border:1px solid var(--border)" />
+              </label>
+              <label class="grid" style="gap:6px; grid-column:1/-1">
+                <span>Mensaje</span>
+                <textarea rows="4" placeholder="Edad, intereses, horarios"
+                  style="padding:.8rem .9rem; border-radius:14px; border:1px solid var(--border)"></textarea>
+              </label>
+              <div style="grid-column:1/-1; display:flex; gap:8px; flex-wrap:wrap">
+                <button class="btn sun" type="submit">Enviar</button>
+                <a class="btn blue" href="#contacto">Hablar con nosotros</a>
+              </div>
+            </form>
+          </div>
+          <div class="blob" aria-hidden="true">🐥</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Contacto ================= -->
+    <section id="contacto">
+      <h2 class="h2" style="margin:0 0 .6rem">Contacto</h2>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="card">
+          <h3 style="margin-top:0">Ubicación y horario</h3>
+          <ul style="padding-left:1.1rem; margin:0; display:grid; gap:.35rem; color:var(--muted)">
+            <li>Centro, CDMX</li>
+            <li>Lun–Vie 9:00–17:00</li>
+            <li>Sáb 10:00–13:00</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Teléfono y correo</h3>
+          <ul style="padding-left:1.1rem; margin:0; display:grid; gap:.35rem; color:var(--muted)">
+            <li>(55) 0000 0000</li>
+            <li>hola@pequemundo.mx</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap">
+      <div>© <span id="year"></span> Peque Mundo — Hecho con cariño</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <a class="btn mint" href="#inicio">Arriba</a>
+        <a class="btn blue" href="#actividades">Actividades</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año automático
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil básico (si quisieras hacerlo fijo)
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    if(toggle && nav){
+      toggle.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+  </script>
+</body>
+</html>

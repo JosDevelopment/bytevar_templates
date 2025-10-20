@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editorial — Orange Light</title>
+  <meta name="description" content="Plantilla editorial minimalista en modo claro con paleta naranja." />
+  <style>
+    /* =============================
+       Editorial Minimal — Orange Light
+       Modo claro forzado + paleta naranja
+       ============================= */
+    :root{
+      /* Base light */
+      --bg:#ffffff;              /* fondo principal */
+      --fg:#111111;              /* texto principal */
+      --muted:#4b5563;           /* texto secundario */
+      --rule:#111111;            /* líneas editoriales */
+      --link:#0f172a;            /* color de enlaces por defecto */
+      --container:1040px;        /* ancho máx del contenido */
+      --lh:1.55;                 /* line-height base */
+
+      /* Paleta naranja (inspirada en Tailwind Orange) */
+      --orange-50:#fff7ed;
+      --orange-100:#ffedd5;
+      --orange-200:#fed7aa;
+      --orange-300:#fdba74;
+      --orange-400:#fb923c;
+      --orange-500:#f97316;  /* acento principal */
+      --orange-600:#ea580c;  /* acento hover */
+      --orange-700:#c2410c;  /* acento fuerte */
+
+      /* Derivados UI */
+      --accent:var(--orange-600);
+      --accent-soft:var(--orange-50);
+      --accent-mid:var(--orange-200);
+    }
+
+    /* Reset básico */
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; background:var(--bg); color:var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial;
+      line-height: var(--lh);
+    }
+    .serif{ font-family: ui-serif, Georgia, Cambria, Times, "Times New Roman", serif }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace }
+
+    a{ color:var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    a:hover{ text-decoration-thickness: 2px; color:var(--orange-700) }
+
+    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:22px }
+
+    /* ======= Cabecera ======= */
+    header{ border-bottom:2px solid var(--rule); }
+    .masthead{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; padding:18px 0 }
+    .brand{ font-variant-caps: small-caps; letter-spacing:.06em; font-weight:900; font-size: clamp(1.2rem, .9rem + 1.2vw, 1.8rem); color:var(--accent) }
+    .tagline{ color:var(--muted); font-size:.95rem }
+
+    .nav{ display:flex; gap:18px; padding:10px 0; border-top:1px solid var(--rule) }
+    .nav a{ text-decoration:none; color:inherit; padding:6px 0; border-bottom:2px solid transparent; font-weight:700 }
+    .nav a:hover{ border-color: var(--accent); color:var(--accent) }
+
+    /* ======= Hero ======= */
+    .hero{ display:grid; grid-template-columns: 1.2fr .8fr; gap:28px; padding:32px 0 }
+    .dek{ color:var(--muted); font-size: clamp(1.05rem, .9rem + .5vw, 1.2rem) }
+    .hed{ font-size: clamp(2rem, 1.2rem + 3vw, 3.4rem); line-height:1.1; letter-spacing:-.01em }
+
+    .hero-aside{ border-left:2px solid var(--rule); padding-left:18px; display:grid; align-content:start; gap:10px }
+    .bullet{ display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start }
+    .bullet::before{ content:"◆"; color:var(--accent); font-size:.9rem; line-height:1.2; margin-top:2px }
+
+    /* ======= Separadores ======= */
+    .rule{ border-top:2px solid var(--rule); margin:28px 0 }
+    .rule-thin{ border-top:1px solid var(--rule); margin:18px 0 }
+
+    /* ======= Secciones ======= */
+    section{ padding:18px 0 }
+    .section-title{ font-weight:900; letter-spacing:.02em; text-transform:uppercase; font-size:.92rem; color:var(--accent) }
+
+    /* ======= Columnas ======= */
+    .cols-3{ columns: 3 280px; column-gap: 26px }
+    .cols-2{ columns: 2 320px; column-gap: 26px }
+    .cols p{ break-inside: avoid; margin: 0 0 1rem }
+
+    /* ======= Tabla de precios ======= */
+    table{ width:100%; border-collapse: collapse; font-size:.98rem }
+    th, td{ padding:12px 10px; text-align:left; vertical-align:top }
+    thead th{ border-bottom:2px solid var(--rule); font-weight:900; color:var(--accent) }
+    tbody tr + tr td{ border-top:1px solid var(--rule) }
+    .price{ font-weight:900; color:var(--accent) }
+    .ok{ color:var(--accent); font-weight:700 }
+
+    /* ======= Citas y resaltados ======= */
+    blockquote{ border-left:4px solid var(--accent); margin:0; padding:10px 14px; background:var(--accent-soft) }
+
+    /* ======= CTA botón editorial ======= */
+    .cta{
+      display:inline-flex; align-items:center; gap:.6rem; font-weight:900; letter-spacing:.02em;
+      background:var(--accent); color:white; border:none; padding:.7rem 1rem; text-decoration:none
+    }
+    .cta:hover{ background:var(--orange-700) }
+
+    /* ======= Badges suaves para reforzar naranja ======= */
+    .badge{ display:inline-block; padding:.2rem .5rem; border:1px solid var(--orange-300); background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:.8rem }
+
+    /* ======= Footer ======= */
+    footer{ border-top:2px solid var(--rule); padding:22px 0; color:var(--muted) }
+
+    /* ======= Responsive ======= */
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr }
+      .hero-aside{ border-left:none; border-top:2px solid var(--rule); padding-left:0; padding-top:16px }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container masthead">
+      <div>
+        <div class="brand serif">El Diario de tu Empresa</div>
+        <div class="tagline mono">Estrategia • Producto • Datos</div>
+      </div>
+      <nav class="nav mono" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#casos">Casos</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio" class="container">
+    <!-- HERO EDITORIAL -->
+    <section class="hero">
+      <div>
+        <span class="badge mono">Nuevo formato</span>
+        <h1 class="hed serif">Comunica con claridad y autoridad en un tono cálido</h1>
+        <p class="dek">Retícula editorial, títulos serif contundentes y una paleta <strong>naranja</strong> que aporta energía sin perder sobriedad. Ideal para reportes, consultoría y B2B.</p>
+        <div class="rule-thin"></div>
+        <div class="cols cols-2">
+          <p>Este template prioriza el <strong>contenido</strong> con una retícula flexible. Sin tarjetas ni sombras: solo líneas, tipografía y aire.</p>
+          <p>CTA discretos pero visibles, destacados con naranja. Modo <em>light</em> permanente para consistencia visual en materiales ejecutivos.</p>
+        </div>
+        <div style="margin-top:14px">
+          <a class="cta mono" href="#contacto">Solicitar propuesta</a>
+        </div>
+      </div>
+      <aside class="hero-aside">
+        <div class="bullet"><div></div><div>Paleta naranja: <span class="mono">500–700</span> en acentos; 50–200 en fondos.</div></div>
+        <div class="bullet"><div></div><div>Sin dependencias externas. HTML+CSS puro.</div></div>
+        <div class="bullet"><div></div><div>Tipografía combinada: serif para títulos, sans/mono en UI.</div></div>
+        <div class="bullet"><div></div><div>Secciones modulares: servicios, casos, equipo y contacto.</div></div>
+      </aside>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+      <div class="section-title mono">Servicios</div>
+      <div class="cols cols-3">
+        <p><strong>Diagnóstico</strong>: entrevistas, mapeo y KPIs. Informe ejecutivo y backlog inicial.</p>
+        <p><strong>Producto digital</strong>: descubrimiento, prototipo, validación y plan de entrega.</p>
+        <p><strong>Datos & Analytics</strong>: gobierno, pipelines y tableros operativos.</p>
+        <p><strong>Operación</strong>: rediseño de procesos, automatización, control y PMO ligera.</p>
+        <p><strong>Adopción</strong>: formación, playbooks y transferencia.</p>
+        <p><strong>Soporte</strong>: SLAs, monitoreo y mejora continua.</p>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- CASO DESTACADO -->
+    <section id="casos">
+      <div class="section-title mono">Caso destacado</div>
+      <blockquote class="serif">
+        “En 90 días migramos a decisiones con métricas semanales. El margen operativo subió un 6%.”
+      </blockquote>
+      <p class="mono" style="margin:.6rem 0 0">— Dirección de Operaciones, Retail LATAM</p>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- PRECIOS (tabla) -->
+    <section id="precios">
+      <div class="section-title mono">Planes y alcances</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Incluye</th>
+            <th>Entrega</th>
+            <th class="mono">Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Inicial</strong></td>
+            <td>Diagnóstico, backlog, roadmap 90 días</td>
+            <td>2–3 semanas</td>
+            <td class="price">$7,500 USD</td>
+          </tr>
+          <tr>
+            <td><strong>Proyecto</strong></td>
+            <td>UX + MVP, tableros, capacitación</td>
+            <td>6–10 semanas</td>
+            <td class="price">$24,000 USD</td>
+          </tr>
+          <tr>
+            <td><strong>Escala</strong></td>
+            <td>Portafolio, PMO, SLAs y mejora</td>
+            <td>3+ meses</td>
+            <td class="price">A convenir</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mono" style="margin-top:8px">*Precios referenciales. Ajustables por alcance y complejidad.</p>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- EQUIPO -->
+    <section id="equipo">
+      <div class="section-title mono">Equipo</div>
+      <div class="cols cols-2">
+        <p><strong>Dirección</strong>: perfiles senior con 10+ años en operaciones, data y producto.</p>
+        <p><strong>Delivery</strong>: PMs, diseñadores, ingenieros y analistas en células ágiles.</p>
+        <p><strong>Red de expertos</strong>: compliance, ciberseguridad, finanzas y legal bajo demanda.</p>
+        <p><strong>Gobernanza</strong>: ética, seguridad y privacidad desde el diseño.</p>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- CONTACTO / CTA -->
+    <section id="contacto">
+      <div class="section-title mono">Contacto</div>
+      <p class="dek">Escríbenos con objetivo, restricciones y plazo. Respondemos en 24–48h hábiles.</p>
+      <form class="mono" onsubmit="event.preventDefault()" style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:12px">
+        <label style="display:grid; gap:6px">
+          <span>Nombre</span>
+          <input required placeholder="Nombre y apellido" style="padding:.7rem .8rem; border:1px solid var(--rule); background:transparent; color:inherit"/>
+        </label>
+        <label style="display:grid; gap:6px">
+          <span>Correo</span>
+          <input type="email" required placeholder="correo@empresa.com" style="padding:.7rem .8rem; border:1px solid var(--rule); background:transparent; color:inherit"/>
+        </label>
+        <label style="display:grid; gap:6px; grid-column:1/-1">
+          <span>Mensaje</span>
+          <textarea rows="5" placeholder="Contexto y objetivo" style="padding:.7rem .8rem; border:1px solid var(--rule); background:transparent; color:inherit"></textarea>
+        </label>
+        <div style="grid-column:1/-1; display:flex; gap:16px; align-items:center">
+          <button class="cta" type="submit">Enviar propuesta</button>
+          <a href="#inicio" class="mono" style="text-decoration:none; border-bottom:2px solid var(--accent); padding-bottom:2px; color:var(--accent)">Volver arriba</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+      <div>© <span id="year"></span> Editorial Orange Light — Todos los derechos reservados</div>
+      <div style="display:flex; gap:14px">
+        <a href="#" style="color:inherit">Aviso</a>
+        <a href="#" style="color:inherit">Privacidad</a>
+        <a href="#inicio" style="color:inherit">Inicio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
