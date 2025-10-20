@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catálogo de Templates</title>
+  <meta name="description" content="Catálogo minimalista de templates: enlaces a carpetas del proyecto." />
+  <style>
+    /* =========================
+       Paleta + tokens
+       ========================= */
+    :root{
+      --bg: #0b1020;
+      --panel: color-mix(in oklab, white 6%, var(--bg));
+      --fg: #edf2ff;
+      --muted: #b8c1ff;
+      --border: color-mix(in oklab, white 10%, var(--bg));
+      --ring: color-mix(in oklab, #7c91ff 60%, white);
+
+      --blue: #5aa9ff;
+      --violet: #a78bfa;
+      --mint: #7de2c4;
+      --amber: #f9b64e;
+      --rose: #ff7aa9;
+
+      --radius: 16px;
+      --container: 1100px;
+      --shadow: 0 12px 40px rgba(2,8,23,.45);
+      --glass: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    }
+
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f7f7fb;
+        --panel: #ffffffcc;
+        --fg: #0f172a;
+        --muted: #475569;
+        --border: rgba(2,6,23,.08);
+        --shadow: 0 12px 24px rgba(2,8,23,.08);
+        --glass: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.75));
+      }
+    }
+
+    /* =========================
+       Reset + base
+       ========================= */
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body{
+      margin: 0;
+      color: var(--fg);
+      background:
+        radial-gradient(60% 60% at 100% 0%, rgba(124,145,255,.25), transparent 60%),
+        radial-gradient(40% 50% at 0% 100%, rgba(167,139,250,.25), transparent 60%),
+        var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none }
+
+    .container{ width: 100%; max-width: var(--container); margin-inline: auto; padding: 28px 20px }
+
+    /* =========================
+       Header
+       ========================= */
+    header{
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: saturate(140%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav{
+      height: 68px; display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:.7rem; font-weight: 800; letter-spacing:.2px;
+    }
+    .brand-badge{
+      width: 26px; height: 26px; border-radius: 8px;
+      background: conic-gradient(from 220deg, #7c91ff, #7de2c4, #f9b64e, #ff7aa9, #7c91ff);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.2) inset;
+    }
+
+    /* =========================
+       Intro
+       ========================= */
+    .intro{
+      display:grid; gap:8px; margin: 18px 0 8px;
+    }
+    .title{ font-size: clamp(1.6rem, 1.2rem + 2vw, 2.2rem); line-height: 1.1; letter-spacing: -.02em }
+    .lead{ color: var(--muted); }
+
+    /* =========================
+       Grid de enlaces
+       ========================= */
+    .grid{
+      display:grid; gap:16px;
+      grid-template-columns: repeat(6, 1fr);
+    }
+    @media (max-width: 1100px){ .grid{ grid-template-columns: repeat(4, 1fr) } }
+    @media (max-width: 800px){ .grid{ grid-template-columns: repeat(2, 1fr) } }
+    @media (max-width: 480px){ .grid{ grid-template-columns: 1fr } }
+
+    .tile{
+      display:block; position: relative; border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--glass);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      outline: none;
+    }
+    .tile:focus-visible{
+      box-shadow: 0 0 0 4px var(--ring), var(--shadow);
+    }
+    .tile:hover{
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, white 20%, var(--border));
+    }
+
+    .tile .tag{
+      display:inline-flex; align-items:center; gap:.45rem;
+      font-size: .78rem; font-weight: 800; letter-spacing:.02em;
+      padding: .32rem .6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+    }
+    .tile .name{
+      margin: 10px 0 2px; font-weight: 900; letter-spacing:.01em;
+      font-size: clamp(1rem, .95rem + .5vw, 1.1rem);
+    }
+    .tile .desc{ color: var(--muted); font-size: .95rem }
+
+    /* halos de color */
+    .halo{
+      position:absolute; inset:auto -20% -30% -20%;
+      height: 70%; filter: blur(30px); opacity: .45; pointer-events:none;
+      background: linear-gradient(120deg, transparent, var(--c1), var(--c2), transparent);
+    }
+
+    /* footer */
+    footer{
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding: 24px 0; margin-top: 22px;
+      font-size: .95rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true"></span>
+        <span>Catálogo de Templates</span>
+      </div>
+      <div class="lead">Links directos a carpetas</div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <section class="intro">
+      <h1 class="title">Explora las plantillas</h1>
+      <p class="lead">Listado minimalista con enlaces a las carpetas del proyecto.</p>
+    </section>
+
+    <section class="grid" aria-label="Catálogo">
+      <!-- Blue Clean -->
+      <a class="tile" href="./blue_clean/" aria-label="Abrir carpeta blue_clean">
+        <span class="tag" style="border-color:rgba(90,169,255,.35); background:rgba(90,169,255,.12)">blue_clean</span>
+        <div class="name">Minimal Clean — Azul</div>
+        <div class="desc">UI limpia, hero + secciones clave.</div>
+        <div class="halo" style="--c1:rgba(90,169,255,.35); --c2:rgba(124,145,255,.32)"></div>
+      </a>
+
+      <!-- Childish -->
+      <a class="tile" href="./childish/" aria-label="Abrir carpeta childish">
+        <span class="tag" style="border-color:rgba(125,226,196,.35); background:rgba(125,226,196,.12)">childish</span>
+        <div class="name">Infantil Lúdica</div>
+        <div class="desc">Pasteles, blobs y nubes suaves.</div>
+        <div class="halo" style="--c1:rgba(125,226,196,.35); --c2:rgba(255,122,169,.28)"></div>
+      </a>
+
+      <!-- Company Diary -->
+      <a class="tile" href="./company_diary/" aria-label="Abrir carpeta company_diary">
+        <span class="tag" style="border-color:rgba(167,139,250,.35); background:rgba(167,139,250,.12)">company_diary</span>
+        <div class="name">Editorial / Diario</div>
+        <div class="desc">Estilo periódico moderno, columnas.</div>
+        <div class="halo" style="--c1:rgba(167,139,250,.35); --c2:rgba(124,145,255,.28)"></div>
+      </a>
+
+      <!-- Legal Profesional -->
+      <a class="tile" href="./legal_profesional/" aria-label="Abrir carpeta legal_profesional">
+        <span class="tag" style="border-color:rgba(200,169,104,.4); background:rgba(200,169,104,.12)">legal_profesional</span>
+        <div class="name">Legal Profesional</div>
+        <div class="desc">Sobrio, marino + dorado.</div>
+        <div class="halo" style="--c1:rgba(200,169,104,.36); --c2:rgba(34,48,69,.40)"></div>
+      </a>
+
+      <!-- Violet Glass -->
+      <a class="tile" href="./violet_glass/" aria-label="Abrir carpeta violet_glass">
+        <span class="tag" style="border-color:rgba(167,139,250,.4); background:rgba(167,139,250,.14)">violet_glass</span>
+        <div class="name">Violet Glass</div>
+        <div class="desc">Glassmorphism violeta sutil.</div>
+        <div class="halo" style="--c1:rgba(167,139,250,.42); --c2:rgba(255,122,169,.28)"></div>
+      </a>
+    </section>
+
+    <footer>
+      <div class="container" style="padding:0">
+        © <span id="y"></span> Catálogo — UI minimal y accesible
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
