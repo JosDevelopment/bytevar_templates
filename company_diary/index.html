@@ -4,36 +4,70 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Editorial — Orange Light</title>
-  <meta name="description" content="Plantilla editorial minimalista en modo claro con paleta naranja." />
+  <meta name="description" content="Plantilla editorial minimalista con paleta naranja, mobile-first y dark mode." />
   <style>
     /* =============================
-       Editorial Minimal — Orange Light
-       Modo claro forzado + paleta naranja
+       Editorial Minimal — Orange Light (mobile-first + dark mode)
        ============================= */
     :root{
-      /* Base light */
-      --bg:#ffffff;              /* fondo principal */
-      --fg:#111111;              /* texto principal */
-      --muted:#4b5563;           /* texto secundario */
-      --rule:#111111;            /* líneas editoriales */
-      --link:#0f172a;            /* color de enlaces por defecto */
-      --container:1040px;        /* ancho máx del contenido */
-      --lh:1.55;                 /* line-height base */
+      scroll-behavior:smooth;
 
-      /* Paleta naranja (inspirada en Tailwind Orange) */
+      --header-h:56px;
+
+      /* Base (light) */
+      --bg:#ffffff;
+      --fg:#111111;
+      --muted:#4b5563;
+      --rule:#111111;
+      --container:1040px;
+      --lh:1.55;
+
+      /* Paleta naranja */
       --orange-50:#fff7ed;
       --orange-100:#ffedd5;
       --orange-200:#fed7aa;
       --orange-300:#fdba74;
       --orange-400:#fb923c;
-      --orange-500:#f97316;  /* acento principal */
-      --orange-600:#ea580c;  /* acento hover */
-      --orange-700:#c2410c;  /* acento fuerte */
+      --orange-500:#f97316;  /* acento UI */
+      --orange-600:#ea580c;  /* hover */
+      --orange-700:#c2410c;  /* fuerte */
 
-      /* Derivados UI */
+      /* Derivados UI (light) */
       --accent:var(--orange-600);
       --accent-soft:var(--orange-50);
       --accent-mid:var(--orange-200);
+
+      /* Menú (popover) */
+      --menu-bg:#ffffff;
+      --menu-border:#111111;
+
+      /* Botón icono */
+      --btn-bg:#ffffff;
+      --btn-fg:#111111;
+      --btn-border:#111111;
+    }
+    @media (min-width:860px){ :root{ --header-h:64px } }
+
+    /* Dark mode */
+    :root[data-theme="dark"]{
+      --bg:#0f1217;
+      --fg:#e6e8eb;
+      --muted:#a0a6b2;
+      --rule:#cbd5e1;
+
+      /* Acentos: más vivos sobre fondo oscuro */
+      --accent:#f97316; /* orange-500 para buen contraste */
+      --accent-soft: color-mix(in oklab, var(--accent) 16%, transparent);
+      --accent-mid:  color-mix(in oklab, var(--accent) 28%, #1a1f27);
+
+      /* Menú */
+      --menu-bg:#0f1520;
+      --menu-border:#cbd5e1;
+
+      /* Botón icono */
+      --btn-bg:#10151d;
+      --btn-fg:#e6e8eb;
+      --btn-border:#cbd5e1;
     }
 
     /* Reset básico */
@@ -46,94 +80,199 @@
     }
     .serif{ font-family: ui-serif, Georgia, Cambria, Times, "Times New Roman", serif }
     .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
 
     a{ color:var(--accent); text-decoration: underline; text-underline-offset: 3px; }
     a:hover{ text-decoration-thickness: 2px; color:var(--orange-700) }
 
-    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:22px }
+    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:16px }
 
-    /* ======= Cabecera ======= */
-    header{ border-bottom:2px solid var(--rule); }
-    .masthead{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; padding:18px 0 }
-    .brand{ font-variant-caps: small-caps; letter-spacing:.06em; font-weight:900; font-size: clamp(1.2rem, .9rem + 1.2vw, 1.8rem); color:var(--accent) }
-    .tagline{ color:var(--muted); font-size:.95rem }
+    /* ======= Header + Nav (mobile-first) ======= */
+    header{
+      position:sticky; top:0; z-index:50;
+      border-bottom:2px solid var(--rule);
+      background:var(--bg);
+    }
+    .masthead{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      /* altura real se sincroniza por JS en --header-h */
+      padding-block:10px;
+    }
+    .brand-wrap{ display:flex; flex-direction:column; gap:4px }
+    .brand{
+      font-variant-caps: small-caps; letter-spacing:.06em; font-weight:900;
+      font-size: clamp(1.15rem, .95rem + 1vw, 1.6rem); color:var(--accent);
+      line-height:1.1;
+    }
+    .tagline{ color:var(--muted); font-size:.9rem }
 
-    .nav{ display:flex; gap:18px; padding:10px 0; border-top:1px solid var(--rule) }
-    .nav a{ text-decoration:none; color:inherit; padding:6px 0; border-bottom:2px solid transparent; font-weight:700 }
-    .nav a:hover{ border-color: var(--accent); color:var(--accent) }
+    /* Botón icono (hamburguesa / theme) */
+    .icon-btn{
+      width:40px; height:40px; display:inline-grid; place-items:center;
+      border:2px solid var(--btn-border); border-radius:8px;
+      background:var(--btn-bg); color:var(--btn-fg);
+    }
+    .icon{ width:20px; height:20px; display:block }
+    .icon path{ stroke: currentColor; fill:none }
+
+    .menu-toggle .i-close{ display:none }
+    .menu-toggle[aria-expanded="true"] .i-menu{ display:none }
+    .menu-toggle[aria-expanded="true"] .i-close{ display:block }
+
+    .theme-btn .i-moon{ display:none }
+    :root[data-theme="dark"] .theme-btn .i-sun{ display:none }
+    :root[data-theme="dark"] .theme-btn .i-moon{ display:block }
+
+    /* Nav popover móvil */
+    nav.nav{
+      position: fixed;
+      top: calc(var(--header-h) + 6px);
+      right: 12px;
+      width: min(88vw, 260px);
+      background: var(--menu-bg);
+      border:2px solid var(--menu-border);
+      border-radius:10px;
+      opacity:0; visibility:hidden; pointer-events:none;
+      transform: translateY(-6px);
+      transition: opacity .16s ease, transform .16s ease, visibility 0s linear .16s;
+    }
+    .nav ul{ list-style:none; margin:0; padding:8px }
+    .nav a{
+      display:block; padding:.55rem .6rem; border-radius:6px;
+      text-decoration:none; color:inherit; border-bottom:2px solid transparent;
+      font-weight:800; line-height:1.25; font-size:.98rem;
+    }
+    .nav a:hover{ color:var(--accent); border-color:var(--accent) }
+    nav.nav.open{ opacity:1; visibility:visible; pointer-events:auto; transform: translateY(0) }
+
+    /* Nav inline (desktop) */
+    @media (min-width:860px){
+      .menu-toggle{ display:none }
+      nav.nav{
+        position: static; width:auto; border:0; border-radius:0; opacity:1; visibility:visible; pointer-events:auto; transform:none;
+      }
+      .nav{ display:flex; gap:18px; padding:0; border:0 }
+      .nav ul{ display:flex; gap:18px; padding:0 }
+      .nav a{ padding:6px 0; border-bottom:2px solid transparent }
+    }
 
     /* ======= Hero ======= */
-    .hero{ display:grid; grid-template-columns: 1.2fr .8fr; gap:28px; padding:32px 0 }
-    .dek{ color:var(--muted); font-size: clamp(1.05rem, .9rem + .5vw, 1.2rem) }
-    .hed{ font-size: clamp(2rem, 1.2rem + 3vw, 3.4rem); line-height:1.1; letter-spacing:-.01em }
+    .hero{ display:grid; grid-template-columns:1fr; gap:18px; padding:20px 0 }
+    @media (min-width:900px){ .hero{ grid-template-columns: 1.2fr .8fr; gap:26px; padding:28px 0 } }
 
-    .hero-aside{ border-left:2px solid var(--rule); padding-left:18px; display:grid; align-content:start; gap:10px }
-    .bullet{ display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start }
+    .dek{ color:var(--muted); font-size: clamp(1rem, .92rem + .5vw, 1.15rem) }
+    .hed{ font-size: clamp(1.9rem, 1.2rem + 3vw, 3.2rem); line-height:1.1; letter-spacing:-.01em }
+
+    .hero-aside{ border-left:2px solid var(--rule); padding-left:16px; display:grid; align-content:start; gap:10px }
+    @media (max-width:900px){ .hero-aside{ border-left:none; border-top:2px solid var(--rule); padding-left:0; padding-top:14px } }
+    .bullet{ display:flex; gap:10px; align-items:flex-start; font-size:.98rem }
     .bullet::before{ content:"◆"; color:var(--accent); font-size:.9rem; line-height:1.2; margin-top:2px }
 
     /* ======= Separadores ======= */
-    .rule{ border-top:2px solid var(--rule); margin:28px 0 }
-    .rule-thin{ border-top:1px solid var(--rule); margin:18px 0 }
+    .rule{ border-top:2px solid var(--rule); margin:24px 0 }
+    .rule-thin{ border-top:1px solid var(--rule); margin:16px 0 }
 
     /* ======= Secciones ======= */
     section{ padding:18px 0 }
-    .section-title{ font-weight:900; letter-spacing:.02em; text-transform:uppercase; font-size:.92rem; color:var(--accent) }
+    .section-title{ font-weight:900; letter-spacing:.02em; text-transform:uppercase; font-size:.9rem; color:var(--accent) }
 
-    /* ======= Columnas ======= */
-    .cols-3{ columns: 3 280px; column-gap: 26px }
-    .cols-2{ columns: 2 320px; column-gap: 26px }
+    /* ======= Columnas (multi-col) ======= */
     .cols p{ break-inside: avoid; margin: 0 0 1rem }
+    .cols-3{ columns:3 280px; column-gap: 24px }
+    .cols-2{ columns:2 320px; column-gap: 24px }
+    @media (max-width:640px){
+      .cols-3, .cols-2{ columns:1; column-gap:0 }
+    }
 
-    /* ======= Tabla de precios ======= */
-    table{ width:100%; border-collapse: collapse; font-size:.98rem }
-    th, td{ padding:12px 10px; text-align:left; vertical-align:top }
-    thead th{ border-bottom:2px solid var(--rule); font-weight:900; color:var(--accent) }
-    tbody tr + tr td{ border-top:1px solid var(--rule) }
+    /* ======= Tabla de precios (sin overflow) ======= */
+    table.price-table{
+      width:100%; border-collapse: collapse; font-size:.98rem;
+    }
+    .price-table th, .price-table td{ padding:12px 10px; text-align:left; vertical-align:top }
+    .price-table thead th{ border-bottom:2px solid var(--rule); font-weight:900; color:var(--accent) }
+    .price-table tbody tr + tr td{ border-top:1px solid var(--rule) }
     .price{ font-weight:900; color:var(--accent) }
-    .ok{ color:var(--accent); font-weight:700 }
+
+    /* Móvil: filas apiladas como cards con etiquetas */
+    @media (max-width:640px){
+      .price-table thead{
+        position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; padding:0; margin:-1px;
+      }
+      .price-table, .price-table tbody, .price-table tr, .price-table td{ display:block; width:100% }
+      .price-table tr{
+        border:2px solid var(--rule); border-radius:10px; padding:10px; margin-bottom:10px;
+      }
+      .price-table td{
+        border:0; padding:6px 0; display:flex; gap:10px; align-items:baseline;
+      }
+      .price-table td::before{
+        content: attr(data-label);
+        flex:0 0 38%;
+        color:var(--muted); font-weight:900;
+      }
+    }
 
     /* ======= Citas y resaltados ======= */
     blockquote{ border-left:4px solid var(--accent); margin:0; padding:10px 14px; background:var(--accent-soft) }
 
-    /* ======= CTA botón editorial ======= */
+    /* ======= CTA ======= */
     .cta{
       display:inline-flex; align-items:center; gap:.6rem; font-weight:900; letter-spacing:.02em;
       background:var(--accent); color:white; border:none; padding:.7rem 1rem; text-decoration:none
     }
     .cta:hover{ background:var(--orange-700) }
 
-    /* ======= Badges suaves para reforzar naranja ======= */
-    .badge{ display:inline-block; padding:.2rem .5rem; border:1px solid var(--orange-300); background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:.8rem }
+    /* ======= Badge ======= */
+    .badge{ display:inline-block; padding:.2rem .5rem; border:1px solid var(--accent-mid); background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:.8rem }
 
     /* ======= Footer ======= */
     footer{ border-top:2px solid var(--rule); padding:22px 0; color:var(--muted) }
-
-    /* ======= Responsive ======= */
-    @media (max-width: 900px){
-      .hero{ grid-template-columns: 1fr }
-      .hero-aside{ border-left:none; border-top:2px solid var(--rule); padding-left:0; padding-top:16px }
-    }
   </style>
 </head>
 <body>
   <header>
-    <div class="container masthead">
-      <div>
+    <div class="container masthead" role="navigation" aria-label="Principal">
+      <div class="brand-wrap">
         <div class="brand serif">El Diario de tu Empresa</div>
         <div class="tagline mono">Estrategia • Producto • Datos</div>
       </div>
-      <nav class="nav mono" aria-label="Navegación principal">
-        <a href="#inicio">Inicio</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#casos">Casos</a>
-        <a href="#equipo">Equipo</a>
-        <a href="#contacto">Contacto</a>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <!-- Tema -->
+        <button class="icon-btn theme-btn" id="themeBtn" aria-pressed="false" title="Cambiar tema">
+          <svg class="icon i-sun" viewBox="0 0 24 24">
+            <path d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5 5L3.5 3.5M20.5 20.5L19 19M5 19L3.5 20.5M20.5 3.5L19 5" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="4" stroke-width="2"/>
+          </svg>
+          <svg class="icon i-moon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sr-only">Tema</span>
+        </button>
+
+        <!-- Toggle móvil -->
+        <button class="icon-btn menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">
+          <svg class="icon i-menu" viewBox="0 0 24 24"><path d="M4 6H20M4 12H20M4 18H20" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="icon i-close" viewBox="0 0 24 24"><path d="M6 6L18 18M6 18L18 6" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="sr-only">Menú</span>
+        </button>
+      </div>
+
+      <!-- Nav -->
+      <nav id="main-nav" class="nav mono" aria-label="Navegación principal">
+        <ul>
+          <li><a href="#inicio" class="navlink">Inicio</a></li>
+          <li><a href="#servicios" class="navlink">Servicios</a></li>
+          <li><a href="#casos" class="navlink">Casos</a></li>
+          <li><a href="#equipo" class="navlink">Equipo</a></li>
+          <li><a href="#contacto" class="navlink">Contacto</a></li>
+        </ul>
       </nav>
     </div>
   </header>
 
   <main id="inicio" class="container">
-    <!-- HERO EDITORIAL -->
+    <!-- HERO -->
     <section class="hero">
       <div>
         <span class="badge mono">Nuevo formato</span>
@@ -142,7 +281,7 @@
         <div class="rule-thin"></div>
         <div class="cols cols-2">
           <p>Este template prioriza el <strong>contenido</strong> con una retícula flexible. Sin tarjetas ni sombras: solo líneas, tipografía y aire.</p>
-          <p>CTA discretos pero visibles, destacados con naranja. Modo <em>light</em> permanente para consistencia visual en materiales ejecutivos.</p>
+          <p>CTA discretos pero visibles, destacados con naranja. Soporta claro/oscuro con variables editoriales.</p>
         </div>
         <div style="margin-top:14px">
           <a class="cta mono" href="#contacto">Solicitar propuesta</a>
@@ -184,10 +323,10 @@
 
     <div class="rule"></div>
 
-    <!-- PRECIOS (tabla) -->
+    <!-- PRECIOS (tabla sin overflow) -->
     <section id="precios">
       <div class="section-title mono">Planes y alcances</div>
-      <table>
+      <table class="price-table" aria-label="Tabla de planes y alcances">
         <thead>
           <tr>
             <th>Plan</th>
@@ -198,22 +337,22 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Inicial</strong></td>
-            <td>Diagnóstico, backlog, roadmap 90 días</td>
-            <td>2–3 semanas</td>
-            <td class="price">$7,500 USD</td>
+            <td data-label="Plan"><strong>Inicial</strong></td>
+            <td data-label="Incluye">Diagnóstico, backlog, roadmap 90 días</td>
+            <td data-label="Entrega">2–3 semanas</td>
+            <td data-label="Precio" class="price">$7,500 USD</td>
           </tr>
           <tr>
-            <td><strong>Proyecto</strong></td>
-            <td>UX + MVP, tableros, capacitación</td>
-            <td>6–10 semanas</td>
-            <td class="price">$24,000 USD</td>
+            <td data-label="Plan"><strong>Proyecto</strong></td>
+            <td data-label="Incluye">UX + MVP, tableros, capacitación</td>
+            <td data-label="Entrega">6–10 semanas</td>
+            <td data-label="Precio" class="price">$24,000 USD</td>
           </tr>
           <tr>
-            <td><strong>Escala</strong></td>
-            <td>Portafolio, PMO, SLAs y mejora</td>
-            <td>3+ meses</td>
-            <td class="price">A convenir</td>
+            <td data-label="Plan"><strong>Escala</strong></td>
+            <td data-label="Incluye">Portafolio, PMO, SLAs y mejora</td>
+            <td data-label="Entrega">3+ meses</td>
+            <td data-label="Precio" class="price">A convenir</td>
           </tr>
         </tbody>
       </table>
@@ -239,7 +378,7 @@
     <section id="contacto">
       <div class="section-title mono">Contacto</div>
       <p class="dek">Escríbenos con objetivo, restricciones y plazo. Respondemos en 24–48h hábiles.</p>
-      <form class="mono" onsubmit="event.preventDefault()" style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:12px">
+      <form class="mono" onsubmit="event.preventDefault()" style="display:grid; grid-template-columns: 1fr; gap:12px; margin-top:12px">
         <label style="display:grid; gap:6px">
           <span>Nombre</span>
           <input required placeholder="Nombre y apellido" style="padding:.7rem .8rem; border:1px solid var(--rule); background:transparent; color:inherit"/>
@@ -248,11 +387,11 @@
           <span>Correo</span>
           <input type="email" required placeholder="correo@empresa.com" style="padding:.7rem .8rem; border:1px solid var(--rule); background:transparent; color:inherit"/>
         </label>
-        <label style="display:grid; gap:6px; grid-column:1/-1">
+        <label style="display:grid; gap:6px">
           <span>Mensaje</span>
           <textarea rows="5" placeholder="Contexto y objetivo" style="padding:.7rem .8rem; border:1px solid var(--rule); background:transparent; color:inherit"></textarea>
         </label>
-        <div style="grid-column:1/-1; display:flex; gap:16px; align-items:center">
+        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap">
           <button class="cta" type="submit">Enviar propuesta</button>
           <a href="#inicio" class="mono" style="text-decoration:none; border-bottom:2px solid var(--accent); padding-bottom:2px; color:var(--accent)">Volver arriba</a>
         </div>
@@ -263,7 +402,7 @@
   <footer>
     <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
       <div>© <span id="year"></span> Editorial Orange Light — Todos los derechos reservados</div>
-      <div style="display:flex; gap:14px">
+      <div style="display:flex; gap:14px; flex-wrap:wrap">
         <a href="#" style="color:inherit">Aviso</a>
         <a href="#" style="color:inherit">Privacidad</a>
         <a href="#inicio" style="color:inherit">Inicio</a>
@@ -272,7 +411,68 @@
   </footer>
 
   <script>
+    // Año
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Sincroniza --header-h con la altura real del header (para posicionar el popover)
+    const headerEl = document.querySelector('header');
+    const syncHeaderH = () => {
+      const h = Math.round(headerEl.getBoundingClientRect().height);
+      document.documentElement.style.setProperty('--header-h', h + 'px');
+    };
+    syncHeaderH();
+    window.addEventListener('resize', syncHeaderH);
+
+    // Menú móvil (popover) + foco seguro
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.getElementById('main-nav');
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) nav.querySelector('.navlink')?.focus({ preventScroll: true });
+    });
+
+    // Cerrar al seleccionar enlace / fuera / Escape
+    const links = document.querySelectorAll('.navlink');
+    links.forEach(a => a.addEventListener('click', ()=>{
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.focus({preventScroll:true});
+    }));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus({ preventScroll: true });
+      }
+    });
+    document.addEventListener('click', (e) => {
+      const clickOnToggle = toggle.contains(e.target);
+      const clickInsideNav = nav.contains(e.target);
+      if (nav.classList.contains('open') && !clickOnToggle && !clickInsideNav) {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Theme toggle con persistencia (respeta sistema si no hay preferencia guardada)
+    const themeBtn = document.getElementById('themeBtn');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved){
+      root.setAttribute('data-theme', saved);
+      themeBtn.setAttribute('aria-pressed', saved === 'dark');
+    }else{
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      themeBtn.setAttribute('aria-pressed', prefersDark);
+    }
+    themeBtn.addEventListener('click', ()=>{
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      themeBtn.setAttribute('aria-pressed', next === 'dark');
+    });
   </script>
 </body>
 </html>

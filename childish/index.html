@@ -4,134 +4,303 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Peque Mundo — Plantilla Infantil</title>
-  <meta name="description" content="Plantilla lúdica e infantil: colores pastel, formas suaves, stickers y tipografía grande." />
+  <meta name="description" content="Plantilla lúdica e infantil: mobile-first, colores pastel, dark mode y nav accesible." />
   <style>
     /* =============================
-       Paleta infantil (pastel)
+       TOKENS (MOBILE-FIRST)
        ============================= */
     :root{
-      --bg:#fffaf5;             /* crema cálido */
-      --fg:#243142;             /* azul grisáceo, buen contraste */
-      --muted:#5b6b7c;
+      scroll-behavior: smooth;
 
-      --pink-100:#ffe4ec; --pink-300:#ffb6c9; --pink-500:#ff7fa1;
-      --blue-100:#e3f2ff; --blue-300:#b6dcff; --blue-500:#7bb8ff;
-      --mint-100:#e6fbf4; --mint-300:#bdf3e4; --mint-500:#7ee3ca;
-      --sun-100:#fff6cc; --sun-300:#ffe58a; --sun-500:#ffd148;
-      --lav-100:#eee9ff; --lav-300:#d4c9ff; --lav-500:#b29bff;
+      --header-h: 60px;
 
-      --panel:#ffffff;          /* tarjetas */
+      /* Base */
+      --bg:#fffaf5;
+      --fg:#243142;
+      --muted:#5b6c7c;
+      --panel:#ffffff;
       --border:rgba(36,49,66,.12);
       --shadow:0 10px 30px rgba(36,49,66,.08);
-      --radius:22px;            /* bien redondeado */
+      --radius:18px;
       --container:1100px;
+
+      /* Pasteles */
+      --pink-100:#ffe4ec; --pink-300:#ffb6c9;
+      --blue-100:#e3f2ff; --blue-300:#b6dcff;
+      --mint-100:#e6fbf4; --mint-300:#bdf3e4;
+      --sun-100:#fff6cc; --sun-300:#ffe58a;
+
+      /* Accesibilidad pastel (texto oscuro sobre pastel) */
+      --on-pastel:#243142;
+      --btn-sun-bg: var(--sun-300);
+      --btn-mint-bg: var(--mint-300);
+      --btn-blue-bg: var(--blue-300);
+      --chip-sun-bg:  var(--sun-100);
+      --chip-pink-bg: var(--pink-100);
+      --chip-mint-bg: var(--mint-100);
+
+      /* Header & Menú (compacto) */
+      --header-bg: color-mix(in oklab, var(--bg) 95%, transparent);
+      --menu-bg: color-mix(in oklab, var(--panel) 98%, transparent);
+      --menu-border: var(--border);
+      --menu-shadow: 0 16px 32px rgba(36,49,66,.18);
+      --menu-link-bg: color-mix(in oklab, var(--panel) 98%, transparent);
+      --menu-link-hover: color-mix(in oklab, var(--fg) 8%, var(--panel));
+
+      /* Nubes decorativas (suaves) */
+      --cloud-a: color-mix(in oklab, var(--blue-100) 85%, white);
+      --cloud-b: color-mix(in oklab, var(--mint-100) 85%, white);
+
+      /* Ilustración */
+      --illu-line:#213042;
+      --illu-skin:#ffd6b0;
+      --illu-hair:#5b3a2e;
+      --illu-cheek:#ffb6c9;
+      --illu-shirt: var(--mint-300);
+      --illu-star:  var(--sun-300);
+      --illu-toy1:  var(--blue-300);
+      --illu-toy2:  var(--pink-300);
+      --illu-toy3:  var(--mint-300);
+    }
+    @media (min-width:860px){ :root{ --header-h: 64px } }
+
+    [data-theme="dark"]{
+      --bg:#0f1420; --fg:#e8ecf3; --muted:#a3afc0; --panel:#121a28;
+      --border: rgba(232,236,243,.12); --shadow: 0 10px 30px rgba(0,0,0,.45);
+
+      --header-bg: color-mix(in oklab, var(--bg) 90%, transparent);
+      --menu-bg: color-mix(in oklab, var(--panel) 98%, transparent);
+      --menu-border: rgba(232,236,243,.12);
+      --menu-shadow: 0 16px 32px rgba(0,0,0,.6);
+      --menu-link-bg: color-mix(in oklab, var(--panel) 96%, transparent);
+      --menu-link-hover: color-mix(in oklab, var(--fg) 12%, var(--panel));
+
+      /* Pasteles ajustados (mantienen texto oscuro --on-pastel) */
+      --btn-sun-bg:  color-mix(in oklab, var(--sun-300) 92%, #000);
+      --btn-mint-bg: color-mix(in oklab, var(--mint-300) 92%, #000);
+      --btn-blue-bg: color-mix(in oklab, var(--blue-300) 92%, #000);
+      --chip-sun-bg:  color-mix(in oklab, var(--sun-100) 88%, #000);
+      --chip-pink-bg: color-mix(in oklab, var(--pink-100) 88%, #000);
+      --chip-mint-bg: color-mix(in oklab, var(--mint-100) 88%, #000);
+
+      /* Ilustración en dark */
+      --illu-line:#e8ecf3;
+      --illu-skin:  color-mix(in oklab, #ffd6b0 88%, #000);
+      --illu-hair:  color-mix(in oklab, #5b3a2e 75%, #000);
+      --illu-cheek: color-mix(in oklab, #ffb6c9 85%, #000);
+      --illu-shirt: color-mix(in oklab, var(--mint-300) 92%, #000);
+      --illu-star:  color-mix(in oklab, var(--sun-300) 92%, #000);
+      --illu-toy1:  color-mix(in oklab, var(--blue-300) 92%, #000);
+      --illu-toy2:  color-mix(in oklab, var(--pink-300) 92%, #000);
+      --illu-toy3:  color-mix(in oklab, var(--mint-300) 92%, #000);
+
+      --cloud-a: color-mix(in oklab, #22324a 60%, transparent);
+      --cloud-b: color-mix(in oklab, #1c273a 60%, transparent);
     }
 
     /* =============================
-       Reset básico + tipografía grande
+       BASE
        ============================= */
     *{ box-sizing:border-box }
     html,body{ height:100% }
     body{
-      margin:0; background:
-        radial-gradient(700px 400px at 110% -80px, var(--blue-100), transparent 70%),
-        radial-gradient(600px 320px at -10% 110%, var(--pink-100), transparent 70%),
-        var(--bg);
-      color:var(--fg);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
-      line-height:1.6;
-      letter-spacing:.2px;
+      margin:0; background: var(--bg); color:var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Trebuchet MS", Arial, sans-serif;
+      line-height:1.6; letter-spacing:.2px;
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
-
     a{ color:inherit; text-decoration:none }
     img{ max-width:100%; display:block }
-    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:20px }
-    .grid{ display:grid; gap:18px }
+    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:16px }
+    .muted{ color: var(--muted) }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
 
-    .h1{ font-size: clamp(2rem, 1.2rem + 3.5vw, 3.6rem); line-height:1.1; letter-spacing:.5px }
-    .h2{ font-size: clamp(1.4rem, 1rem + 1.6vw, 2.2rem) }
-    .lead{ font-size:clamp(1.05rem, .95rem + .8vw, 1.25rem); color:var(--muted) }
+    .h1{ font-size: clamp(1.8rem, 1.3rem + 3vw, 3rem); line-height:1.1 }
+    .h2{ font-size: clamp(1.2rem, 1.05rem + 1.8vw, 1.9rem) }
+    .lead{ font-size:clamp(.98rem, .92rem + .8vw, 1.15rem); color:var(--muted) }
 
     .btn{
-      display:inline-flex; align-items:center; gap:.6rem;
-      padding:.85rem 1.1rem; border-radius:999px; border:2px solid #0000;
+      display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+      padding:.78rem 1rem; border-radius:999px; border:2px solid #0000;
       font-weight:800; box-shadow:var(--shadow); transform:translateY(0);
-      transition:.18s ease;
+      transition:.18s ease; min-height:42px;
     }
     .btn:hover{ transform:translateY(-2px) }
-    .btn.sun{ background:var(--sun-300) }
-    .btn.mint{ background:var(--mint-300) }
-    .btn.blue{ background:var(--blue-300) }
+    .btn.sun  { background: var(--btn-sun-bg);  color: var(--on-pastel) }
+    .btn.mint { background: var(--btn-mint-bg); color: var(--on-pastel) }
+    .btn.blue { background: var(--btn-blue-bg); color: var(--on-pastel) }
 
-    /* Tarjetas tipo sticker */
+    .tag{ display:inline-flex; align-items:center; gap:.4rem; padding:.22rem .5rem; border-radius:999px; font-weight:800; color: var(--on-pastel); font-size:.9rem }
+    .tag.sun{  background: var(--chip-sun-bg) }
+    .tag.pink{ background: var(--chip-pink-bg) }
+    .tag.mint{ background: var(--chip-mint-bg) }
+
     .card{
       background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
-      padding:20px; position:relative; isolation:isolate;
-    }
-    .card::after{
-      content:""; position:absolute; inset:auto -6px -6px auto; width:48px; height:48px; border-radius:12px 0 12px 12px;
-      background: conic-gradient(from 200deg, var(--pink-300), var(--blue-300), var(--mint-300), var(--sun-300), var(--pink-300));
-      filter: blur(10px); opacity:.45; z-index:-1;
+      padding:16px; position:relative; isolation:isolate;
     }
 
-    /* Encabezado con nubes */
+    /* =============================
+       HEADER + NAV (COMPACTO)
+       ============================= */
     header{
-      position:relative; overflow:hidden; border-bottom:1px dashed var(--border);
-      background: linear-gradient(0deg, #fff0, #fff8);
+      position:sticky; top:0; z-index:1000;
+      background: var(--header-bg);
+      backdrop-filter:saturate(140%) blur(8px);
+      border-bottom:1px dashed var(--border);
     }
-    .nav{ height:72px; display:flex; align-items:center; justify-content:space-between; gap:16px }
-    .brand{ display:flex; align-items:center; gap:.7rem; font-weight:900; letter-spacing:.6px }
-    .badge{
-      width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:1.1rem;
-      background:linear-gradient(135deg, var(--sun-300), var(--pink-300));
-      box-shadow:var(--shadow)
-    }
-    .menu-toggle{ display:none }
-    nav ul{ list-style:none; display:flex; gap:10px; padding:0; margin:0 }
-    nav a{ padding:.45rem .8rem; border-radius:999px; background:var(--lav-100); font-weight:700 }
-    nav a:hover{ background:var(--lav-300) }
+    .nav{ height:var(--header-h); display:flex; align-items:center; justify-content:space-between; gap:12px }
+    .brand{ display:flex; align-items:center; gap:.6rem; font-weight:900; letter-spacing:.3px; font-size: clamp(1rem, .95rem + .5vw, 1.12rem) }
+    .badge{ width:28px; height:28px; border-radius:9px; display:grid; place-items:center; background: color-mix(in oklab, var(--sun-300) 70%, var(--panel)); box-shadow:var(--shadow); font-size:.95rem }
 
-    /* Nubes decorativas */
-    .clouds{ position:absolute; inset:auto 0 -40px 0; height:120px; pointer-events:none; opacity:.8 }
+    .icon-btn{
+      width:38px; height:38px; display:inline-grid; place-items:center;
+      border-radius:10px; border:1px solid var(--border); background:var(--panel);
+      color: var(--muted); box-shadow:var(--shadow);
+      transition: transform .18s ease, box-shadow .18s ease, color .18s ease, background-color .18s ease;
+    }
+    .icon-btn:focus-visible{ outline:none; box-shadow:0 0 0 4px color-mix(in oklab, var(--blue-300) 55%, white) }
+    .icon{ width:20px; height:20px; display:block }
+    .icon path{ stroke: currentColor }
+    .menu-toggle *{ pointer-events:none }
+
+    /* Popover móvil: más estrecho y tipografía/padding reducidos */
+    nav{
+      position: fixed;
+      top: calc(env(safe-area-inset-top, 0px) + var(--header-h) + 6px);
+      right: 12px;
+      width: min(88vw, 280px);
+      z-index: 4000;
+      background: var(--menu-bg);
+      border:1px solid var(--menu-border);
+      border-radius:12px;
+      box-shadow: var(--menu-shadow);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transform: translateY(-8px) scale(.98);
+      transform-origin: top right;
+      transition: transform .18s ease, opacity .16s ease, visibility 0s linear .18s;
+    }
+    nav ul{ list-style:none; display:flex; flex-direction:column; gap:4px; padding:8px; margin:0 }
+    nav a{
+      display:block; padding:.6rem .7rem; border-radius:10px; font-weight:700;
+      font-size: clamp(.9rem, .86rem + .2vw, .98rem);
+      line-height:1.25;
+      color:var(--muted); background: var(--menu-link-bg);
+    }
+    nav a:hover, nav a.active{ background: var(--menu-link-hover); color:var(--fg) }
+
+    .menu-toggle{ display:inline-grid; position: relative; z-index: 5000 }
+    .menu-toggle .i-close{ display:none }
+    .menu-toggle[aria-expanded="true"]{ color: var(--fg) }
+    .menu-toggle[aria-expanded="true"] .i-menu{ display:none }
+    .menu-toggle[aria-expanded="true"] .i-close{ display:block }
+
+    .theme-btn{ display:inline-grid }
+    .theme-btn .i-moon{ display:none }
+    :root[data-theme="dark"] .theme-btn .i-sun{ display:none }
+    :root[data-theme="dark"] .theme-btn .i-moon{ display:block }
+
+    nav.open{
+      opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1);
+      transition: transform .18s ease, opacity .16s ease;
+    }
+
+    /* Desktop: nav inline */
+    @media (min-width:860px){
+      .menu-toggle{ display:none }
+      nav{
+        position: static; right:auto; width:auto; z-index:auto;
+        opacity:1; visibility:visible; pointer-events:auto; transform:none;
+        background: transparent; border:0; border-radius:0; box-shadow:none;
+      }
+      nav ul{ flex-direction:row; gap:10px; padding:0 }
+      nav a{ padding:.45rem .7rem; border-radius:999px; background:transparent }
+      nav a:hover{ background: var(--menu-link-hover) }
+    }
+
+    /* Nubes (suaves) */
+    .clouds{ position:absolute; top: 0; left: 0; z-index: -1; height:100%; pointer-events:none; opacity:.6 }
     .clouds svg{ width:100%; height:100% }
     .float{ animation: float 6s ease-in-out infinite }
     @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
 
-    /* Hero con blobs */
-    .hero{ display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:26px; padding:28px 0 10px }
+    /* =============================
+       SECCIONES (MOBILE-FIRST)
+       ============================= */
+    section{ padding:20px 0 }
+
+    /* HERO: 1 columna por defecto */
+    .hero{ display:grid; grid-template-columns:1fr; align-items:center; gap:16px; padding:14px 0 6px }
+    @media (min-width:980px){ .hero{ grid-template-columns: 1.1fr .9fr; gap:26px; padding:24px 0 10px } }
+
     .blob{
       aspect-ratio:1/1; border-radius:40% 60% 60% 40%/55% 45% 55% 45%;
-      background:radial-gradient(60% 60% at 30% 30%, #fff8, #0000), linear-gradient(135deg, var(--mint-300), var(--blue-300));
-      border:1px dashed var(--border); position:relative; display:grid; place-items:center; font-weight:900; color:#213042;
+      background: var(--panel); border:1px dashed var(--border);
+      display:grid; place-items:center; font-weight:900; color:var(--fg);
+      box-shadow: var(--shadow); position:relative;
     }
-    .blob::before{
-      content:"★"; position:absolute; top:10%; left:10%; font-size:24px; color:#f39;
-      transform:rotate(-10deg); opacity:.6
+    .blob svg{ width:86%; height:auto; }
+    .blob svg .line{ stroke: var(--illu-line); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none }
+    .blob svg .skin{  fill: var(--illu-skin) }
+    .blob svg .hair{  fill: var(--illu-hair) }
+    .blob svg .cheek{ fill: var(--illu-cheek) }
+    .blob svg .shirt{ fill: var(--illu-shirt) }
+    .blob svg .toy1{  fill: var(--illu-toy1) }
+    .blob svg .toy2{  fill: var(--illu-toy2) }
+    .blob svg .toy3{  fill: var(--illu-toy3) }
+    .blob svg .star{  fill: var(--illu-star) }
+
+    /* FEATURES: 1 col → 2 → 3 */
+    .features{ display:grid; gap:14px; grid-template-columns:1fr }
+    @media (min-width:560px){ .features{ grid-template-columns: 1fr 1fr } }
+    @media (min-width:980px){ .features{ grid-template-columns: repeat(3,1fr) } }
+
+    /* Grids reutilizables (form/contacto) */
+    .two-col{ display:grid; gap:14px; grid-template-columns: 1fr }
+    @media (min-width:900px){ .two-col{ grid-template-columns: 1.1fr .9fr } }
+    .two-even{ display:grid; gap:10px; grid-template-columns: 1fr }
+    @media (min-width:900px){ .two-even{ grid-template-columns: 1fr 1fr } }
+
+    /* =============================
+       TABLA SIN OVERFLOW (stack en móvil)
+       ============================= */
+    .table-wrap{ border-radius:14px }
+    table.schedule{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0 8px;
+      font-size: clamp(.95rem, .9rem + .3vw, 1rem);
     }
-    .blob::after{
-      content:"✿"; position:absolute; bottom:12%; right:12%; font-size:22px; color:#f93; opacity:.7
+    .schedule th{ text-align:left; color:var(--muted); padding:0 8px }
+    .schedule td{
+      background:var(--panel); border:1px solid var(--border);
+      padding:10px 12px; border-radius:12px; vertical-align:top;
+      overflow-wrap:anywhere; word-break:break-word; hyphens:auto;
     }
 
-    /* Secciones */
-    section{ padding:22px 0 }
-
-    /* Módulo de actividades (cards en rejilla) */
-    .features{ grid-template-columns: repeat(3, 1fr) }
-    @media (max-width: 980px){ .hero{ grid-template-columns:1fr } .features{ grid-template-columns:1fr 1fr } }
-    @media (max-width: 560px){ .features{ grid-template-columns:1fr } }
-
-    .tag{ display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .55rem; border-radius:999px; font-weight:800 }
-    .tag.sun{ background:var(--sun-100) }
-    .tag.pink{ background:var(--pink-100) }
-    .tag.mint{ background:var(--mint-100) }
-
-    /* Lista de horarios / precios en tabla simple */
-    table{ width:100%; border-collapse:separate; border-spacing:0 10px }
-    th{ text-align:left; font-size:.95rem; color:var(--muted) }
-    td{ background:var(--panel); border:1px solid var(--border); padding:12px 14px; border-radius:14px }
+    /* Móvil: convertir filas en cards apiladas */
+    @media (max-width: 640px){
+      .schedule thead{
+        position:absolute; width:1px; height:1px; overflow:hidden;
+        clip:rect(0,0,0,0); white-space:nowrap; border:0; padding:0; margin:-1px;
+      }
+      .schedule, .schedule tbody, .schedule tr, .schedule td{ display:block; width:100% }
+      .schedule tr{
+        background:var(--panel); border:1px solid var(--border); border-radius:14px;
+        padding:10px 12px; margin-bottom:10px; box-shadow:var(--shadow)
+      }
+      .schedule td{
+        border:0; border-radius:0; padding:6px 0; display:flex; gap:10px; align-items:baseline;
+      }
+      .schedule td::before{
+        content: attr(data-label);
+        flex:0 0 42%;
+        color:var(--muted); font-weight:700; font-size:.95rem; line-height:1.3;
+      }
+    }
 
     /* Footer */
-    footer{ padding:30px 0; border-top:1px dashed var(--border); color:var(--muted) }
+    footer{ padding:26px 0; border-top:1px dashed var(--border); color:var(--muted) }
   </style>
 </head>
 <body>
@@ -143,37 +312,58 @@
         <span>Peque Mundo</span>
       </div>
 
-      <button class="btn blue menu-toggle" aria-expanded="false" aria-controls="mobile-nav">Menú</button>
+      <div style="display:flex; align-items:center; gap:.5rem">
+        <!-- Toggle menú -->
+        <button class="icon-btn menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Abrir menú">
+          <svg class="icon i-menu" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="icon i-close" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="sr-only">Menú</span>
+        </button>
 
-      <nav id="mobile-nav">
+        <!-- Tema -->
+        <button class="icon-btn theme-btn" id="themeBtn" aria-pressed="false" title="Cambiar tema">
+          <svg class="icon i-sun" viewBox="0 0 24 24" fill="none">
+            <path d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5 5L3.5 3.5M20.5 20.5L19 19M5 19L3.5 20.5M20.5 3.5L19 5" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="4" stroke-width="2"/>
+          </svg>
+          <svg class="icon i-moon" viewBox="0 0 24 24" fill="none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sr-only">Tema</span>
+        </button>
+      </div>
+
+      <!-- NAV (popover móvil compacto) -->
+      <nav id="mobile-nav" aria-label="Secciones">
         <ul>
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#actividades">Actividades</a></li>
-          <li><a href="#talleres">Talleres</a></li>
-          <li><a href="#inscripcion">Inscripción</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#inicio" class="navlink">Inicio</a></li>
+          <li><a href="#actividades" class="navlink">Actividades</a></li>
+          <li><a href="#talleres" class="navlink">Talleres</a></li>
+          <li><a href="#inscripcion" class="navlink">Inscripción</a></li>
+          <li><a href="#contacto" class="navlink">Contacto</a></li>
         </ul>
       </nav>
     </div>
 
     <!-- Nubes -->
-    <div class="clouds">
-      <svg viewBox="0 0 1200 200" preserveAspectRatio="none" class="float" aria-hidden="true">
-        <g fill="url(#g1)">
-          <path d="M0,120 C120,140 240,100 360,120 C480,140 600,120 720,130 C840,140 960,100 1080,120 L1200,140 L1200,200 L0,200 Z" opacity=".7"/>
-        </g>
+    <div class="clouds" aria-hidden="true">
+      <svg viewBox="0 0 1200 200" preserveAspectRatio="none" class="float">
         <defs>
           <linearGradient id="g1" x1="0" x2="1">
-            <stop offset="0" stop-color="var(--blue-100)"/>
-            <stop offset="1" stop-color="var(--mint-100)"/>
+            <stop offset="0" stop-color="var(--cloud-a)"/>
+            <stop offset="1" stop-color="var(--cloud-b)"/>
           </linearGradient>
         </defs>
+        <g fill="url(#g1)">
+          <path d="M0,120 C120,140 240,100 360,120 C480,140 600,120 720,130 C840,140 960,100 1080,120 L1200,140 L1200,200 L0,200 Z" opacity=".6"/>
+        </g>
       </svg>
     </div>
   </header>
 
-  <!-- ================= Hero ================= -->
+  <!-- ================= Main ================= -->
   <main id="inicio" class="container">
+    <!-- HERO -->
     <section class="hero">
       <div>
         <h1 class="h1">Aprender jugando, crecer sonriendo</h1>
@@ -182,93 +372,104 @@
           <a class="btn sun" href="#inscripcion">Inscribir ahora</a>
           <a class="btn mint" href="#actividades">Ver actividades</a>
         </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px">
           <span class="tag sun">Seguro</span>
           <span class="tag pink">Lúdico</span>
           <span class="tag mint">Inclusivo</span>
         </div>
       </div>
-      <div class="blob">😊 Ilustración</div>
-    </section>
 
-    <!-- ================= Actividades ================= -->
-    <section id="actividades">
-      <h2 class="h2" style="margin:0 0 .6rem">Actividades favoritas</h2>
-      <p class="lead" style="margin:0 0 1rem">Pequeñas tarjetas tipo sticker para destacar lo mejor.</p>
-      <div class="grid features">
-        <article class="card">
-          <h3 style="margin:.2rem 0 .3rem">Arte y colores</h3>
-          <p class="muted">Pintura con dedos, plastilina y sellos.</p>
-        </article>
-        <article class="card">
-          <h3 style="margin:.2rem 0 .3rem">Música y ritmo</h3>
-          <p class="muted">Instrumentos suaves, canciones y palmas.</p>
-        </article>
-        <article class="card">
-          <h3 style="margin:.2rem 0 .3rem">Ciencia mini</h3>
-          <p class="muted">Experimentos seguros y curiosidad.</p>
-        </article>
+      <!-- Ilustración coloreada -->
+      <div class="blob" aria-label="Ilustración infantil decorativa">
+        <svg viewBox="0 0 240 240" role="img" aria-hidden="true" focusable="false">
+          <circle class="skin" cx="120" cy="100" r="38"/>
+          <path class="hair" d="M84 98c2-22 26-34 54-22 7 3 12 7 16 12-8-3-15-4-24-2-11 2-22 7-33 12-5 2-9 2-13 0Z"/>
+          <circle class="cheek" cx="100" cy="112" r="6" opacity=".85"/>
+          <circle class="cheek" cx="140" cy="112" r="6" opacity=".85"/>
+          <path class="line" d="M110 100c-3 0-6-2-6-4M130 100c3 0 6-2 6-4"/>
+          <path class="line" d="M106 120c8 8 20 8 28 0"/>
+          <rect class="shirt" x="92" y="140" rx="10" ry="10" width="56" height="36"/>
+          <path class="line" d="M92 154h56"/>
+          <path class="star" d="M186 64l5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2 5-10Z" opacity=".9"/>
+          <rect class="toy1" x="36" y="164" width="24" height="24" rx="5"/>
+          <rect class="toy2" x="60" y="182" width="24" height="24" rx="5"/>
+          <rect class="toy3" x="84" y="164" width="24" height="24" rx="5"/>
+          <rect class="line"  x="36" y="164" width="24" height="24" rx="5"/>
+          <rect class="line  " x="60" y="182" width="24" height="24" rx="5"/>
+          <rect class="line"  x="84" y="164" width="24" height="24" rx="5"/>
+          <circle class="line" cx="108" cy="100" r="2"/>
+          <circle class="line" cx="132" cy="100" r="2"/>
+          <circle class="line" cx="120" cy="100" r="38"/>
+        </svg>
       </div>
     </section>
 
-    <!-- ================= Talleres / Horarios ================= -->
-    <section id="talleres">
-      <h2 class="h2" style="margin:0 0 .6rem">Talleres y horarios</h2>
-      <p class="lead" style="margin:0 0 1rem">Formato simple, legible y alegre.</p>
-      <table aria-label="Tabla de talleres y horarios">
-        <thead>
-          <tr>
-            <th>Taller</th>
-            <th>Edad</th>
-            <th>Horario</th>
-            <th>Precio</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Exploradores de color</td>
-            <td>3–4 años</td>
-            <td>Lun y Mié, 10:00–11:00</td>
-            <td>$450 MXN/mes</td>
-          </tr>
-          <tr>
-            <td>Mini científicos</td>
-            <td>4–5 años</td>
-            <td>Mar y Jue, 11:30–12:30</td>
-            <td>$520 MXN/mes</td>
-          </tr>
-          <tr>
-            <td>Música en movimiento</td>
-            <td>3–6 años</td>
-            <td>Vie, 10:00–11:00</td>
-            <td>$300 MXN/mes</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- ACTIVIDADES -->
+    <section id="actividades">
+      <h2 class="h2" style="margin:0 0 .6rem">Actividades favoritas</h2>
+      <p class="lead" style="margin:0 0 1rem">Tarjetas tipo sticker para destacar lo mejor.</p>
+      <div class="features">
+        <article class="card"><h3 style="margin:.2rem 0 .3rem">Arte y colores</h3><p class="muted">Pintura con dedos, plastilina y sellos.</p></article>
+        <article class="card"><h3 style="margin:.2rem 0 .3rem">Música y ritmo</h3><p class="muted">Instrumentos suaves, canciones y palmas.</p></article>
+        <article class="card"><h3 style="margin:.2rem 0 .3rem">Ciencia mini</h3><p class="muted">Experimentos seguros y curiosidad.</p></article>
+      </div>
     </section>
 
-    <!-- ================= Inscripción / CTA ================= -->
+    <!-- TALLERES (sin overflow) -->
+    <section id="talleres">
+      <h2 class="h2" style="margin:0 0 .6rem">Talleres y horarios</h2>
+      <p class="lead" style="margin:0 0 1rem">Formato legible y sin desplazamiento horizontal.</p>
+      <div class="table-wrap">
+        <table class="schedule" aria-label="Tabla de talleres y horarios">
+          <thead>
+            <tr><th>Taller</th><th>Edad</th><th>Horario</th><th>Precio</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Taller">Exploradores de color</td>
+              <td data-label="Edad">3–4 años</td>
+              <td data-label="Horario">Lun y Mié, 10:00–11:00</td>
+              <td data-label="Precio">$450 MXN/mes</td>
+            </tr>
+            <tr>
+              <td data-label="Taller">Mini científicos</td>
+              <td data-label="Edad">4–5 años</td>
+              <td data-label="Horario">Mar y Jue, 11:30–12:30</td>
+              <td data-label="Precio">$520 MXN/mes</td>
+            </tr>
+            <tr>
+              <td data-label="Taller">Música en movimiento</td>
+              <td data-label="Edad">3–6 años</td>
+              <td data-label="Horario">Vie, 10:00–11:00</td>
+              <td data-label="Precio">$300 MXN/mes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- INSCRIPCIÓN -->
     <section id="inscripcion">
-      <div class="card" style="background:linear-gradient(135deg, var(--sun-100), #fff); border-style:dashed">
-        <div style="display:grid; grid-template-columns:1.1fr .9fr; gap:16px; align-items:center">
+      <div class="card">
+        <div class="two-col" style="align-items:center">
           <div>
             <h2 class="h2" style="margin:0 0 .5rem">¡Listos para jugar!</h2>
             <p class="lead" style="margin:0 0 .6rem">Completa el formulario y te contactamos con los pasos.</p>
-            <form onsubmit="event.preventDefault()" class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
-              <label class="grid" style="gap:6px">
+            <form onsubmit="event.preventDefault()" class="two-even">
+              <label class="two-even" style="gap:6px">
                 <span>Nombre del adulto</span>
                 <input required placeholder="Nombre y apellido"
-                  style="padding:.8rem .9rem; border-radius:14px; border:1px solid var(--border)" />
+                  style="padding:.78rem .9rem; border-radius:14px; border:1px solid var(--border); background:var(--panel); color:var(--fg)" />
               </label>
-              <label class="grid" style="gap:6px">
+              <label class="two-even" style="gap:6px">
                 <span>Correo</span>
                 <input type="email" required placeholder="correo@ejemplo.com"
-                  style="padding:.8rem .9rem; border-radius:14px; border:1px solid var(--border)" />
+                  style="padding:.78rem .9rem; border-radius:14px; border:1px solid var(--border); background:var(--panel); color:var(--fg)" />
               </label>
-              <label class="grid" style="gap:6px; grid-column:1/-1">
+              <label class="two-even" style="gap:6px; grid-column:1/-1">
                 <span>Mensaje</span>
                 <textarea rows="4" placeholder="Edad, intereses, horarios"
-                  style="padding:.8rem .9rem; border-radius:14px; border:1px solid var(--border)"></textarea>
+                  style="padding:.78rem .9rem; border-radius:14px; border:1px solid var(--border); background:var(--panel); color:var(--fg)"></textarea>
               </label>
               <div style="grid-column:1/-1; display:flex; gap:8px; flex-wrap:wrap">
                 <button class="btn sun" type="submit">Enviar</button>
@@ -276,15 +477,24 @@
               </div>
             </form>
           </div>
-          <div class="blob" aria-hidden="true">🐥</div>
+          <div class="blob" aria-hidden="true">
+            <svg viewBox="0 0 240 240" aria-hidden="true">
+              <circle class="skin" cx="120" cy="100" r="38"/>
+              <path class="hair" d="M84 98c2-22 26-34 54-22 7 3 12 7 16 12-8-3-15-4-24-2-11 2-22 7-33 12-5 2-9 2-13 0Z"/>
+              <circle class="cheek" cx="100" cy="112" r="6" opacity=".85"/>
+              <circle class="cheek" cx="140" cy="112" r="6" opacity=".85"/>
+              <path class="line" d="M110 100c-3 0-6-2-6-4M130 100c3 0 6-2 6-4"/>
+              <path class="line" d="M106 120c8 8 20 8 28 0"/>
+            </svg>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= Contacto ================= -->
+    <!-- CONTACTO -->
     <section id="contacto">
       <h2 class="h2" style="margin:0 0 .6rem">Contacto</h2>
-      <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="two-even">
         <div class="card">
           <h3 style="margin-top:0">Ubicación y horario</h3>
           <ul style="padding-left:1.1rem; margin:0; display:grid; gap:.35rem; color:var(--muted)">
@@ -316,18 +526,63 @@
   </footer>
 
   <script>
-    // Año automático
+    // Año
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menú móvil básico (si quisieras hacerlo fijo)
+    // Toggle menú
     const toggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('nav');
-    if(toggle && nav){
-      toggle.addEventListener('click', () => {
-        const isOpen = nav.classList.toggle('open');
-        toggle.setAttribute('aria-expanded', String(isOpen));
-      });
-    }
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) nav.querySelector('.navlink')?.focus({ preventScroll: true });
+    });
+
+    // Cerrar al seleccionar enlace / fuera / Escape
+    const links = document.querySelectorAll('.navlink');
+    links.forEach(a => a.addEventListener('click', ()=>{
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.focus({preventScroll:true});
+    }));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus({ preventScroll: true });
+      }
+    });
+    document.addEventListener('click', (e) => {
+      const clickOnToggle = toggle.contains(e.target);
+      const clickInsideNav = nav.contains(e.target);
+      if (nav.classList.contains('open') && !clickOnToggle && !clickInsideNav) {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Theme toggle con persistencia
+    const themeBtn = document.getElementById('themeBtn');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved){ root.setAttribute('data-theme', saved); themeBtn.setAttribute('aria-pressed', saved === 'dark'); }
+    themeBtn.addEventListener('click', ()=>{
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      themeBtn.setAttribute('aria-pressed', next === 'dark');
+    });
+
+    // Scrollspy ligero
+    const spyLinks = document.querySelectorAll('.navlink');
+    const sections = [...spyLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const onScroll = () => {
+      const y = window.scrollY + 90; let activeId = '';
+      for(const sec of sections){ if(sec && sec.offsetTop <= y) activeId = '#' + sec.id; }
+      spyLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeId));
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   </script>
 </body>
 </html>

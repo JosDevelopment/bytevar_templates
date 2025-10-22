@@ -27,6 +27,8 @@
       --radius:12px;
       --container:1120px;
       --lh:1.58;
+
+      --header-h:70px;         /* alto de header para nav móvil */
     }
 
     *{ box-sizing:border-box }
@@ -58,21 +60,82 @@
     .card{ background:var(--panel); border:1px solid var(--rule); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px }
 
     header{ position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(6px); background:color-mix(in oklab, var(--bg) 85%, white); border-bottom:1px solid var(--rule) }
-    .nav{ height:70px; display:flex; align-items:center; justify-content:space-between; gap:16px }
+    .nav{ height:var(--header-h); display:flex; align-items:center; justify-content:space-between; gap:16px }
     .brand{ display:flex; align-items:center; gap:.7rem; font-weight:900; letter-spacing:.4px; color:var(--brand) }
     .crest{ width:28px; height:28px; border-radius:6px; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg, var(--brand), #0e1522) }
     .crest::before{ content:"⚖️" }
 
     nav ul{ list-style:none; padding:0; margin:0; display:flex; gap:6px }
-    nav a{ padding:.45rem .7rem; border-radius:8px; color:var(--muted); font-weight:600 }
+    nav a{
+      font-size: clamp(.90rem, .86rem + .2vw, .98rem); /* antes más grande */
+      line-height: 1.25;
+      font-weight: 600;            /* bajar un poco el peso para legibilidad */
+      padding: .5rem .6rem;        /* compactar */
+      min-height: 44px;            /* tap target accesible */
+      white-space: normal;         /* permitir multi-línea */
+      overflow-wrap: anywhere;     /* cortar palabras largas si es necesario */
+      word-break: break-word;
+    }
     nav a.active{ color:var(--brand); background:var(--navy-50) }
     .menu-toggle{ display:none }
-    @media (max-width: 880px){
-      nav{ position:fixed; inset:70px 0 auto 0; background:var(--panel); border-bottom:1px solid var(--rule); transform:translateY(-100%); transition:.22s }
-      nav.open{ transform:translateY(0) }
-      nav ul{ flex-direction:column; padding:14px }
-      .menu-toggle{ display:inline-flex }
-    }
+
+    /* ===== Nav móvil visible ===== */
+    /* Tamaño de texto y comportamiento general de enlaces del nav */
+
+    /* MOBILE: nav flexible al contenido, sin desbordes ni “salidas” a la derecha */
+    html, body{ overflow-x:hidden }
+
+/* MOBILE: nav a ancho completo, sin desplazarse a la derecha */
+@media (max-width: 880px){
+  nav{
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+
+    /* ancho real de viewport con padding incluido */
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    /* safe areas iOS */
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+
+    background: var(--panel);
+    border-bottom:1px solid var(--rule);
+    z-index:2000;
+
+    /* cerrado: totalmente oculto, sin asomarse ni producir scroll */
+    transform: translate3d(0,-100%,0);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    box-shadow: none;
+
+    transition:
+      transform .22s ease,
+      opacity .18s ease,
+      visibility 0s linear .22s,
+      box-shadow .22s ease;
+    will-change: transform;
+  }
+  nav.open{
+    transform: translate3d(0,0,0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: 0 20px 30px rgba(0,0,0,.08);
+  }
+  /* padding interno del listado, responsive y sin desbordes */
+  nav ul{
+    flex-direction: column;
+    padding: 14px clamp(12px, 4vw, 22px);
+    margin: 0;
+  }
+}
+
+
+
 
     /* Hero / portada */
     .hero{ display:grid; grid-template-columns: 1.05fr .95fr; align-items:center; gap:32px; padding:28px 0 }
@@ -81,8 +144,7 @@
 
     /* Secciones grid */
     .areas{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
-    .two{ display:grid; grid-template-columns:1.1fr .9fr; gap:20px }
-    @media (max-width: 980px){ .areas{ grid-template-columns:1fr 1fr } .two{ grid-template-columns:1fr } }
+    @media (max-width: 980px){ .areas{ grid-template-columns:1fr 1fr } }
     @media (max-width: 560px){ .areas{ grid-template-columns:1fr } }
 
     .section-head{ display:flex; align-items:end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px }
@@ -100,7 +162,23 @@
 
     footer{ border-top:1px solid var(--rule); color:var(--muted); padding:32px 0 }
 
-    /* Impresión básica (para PDFs de perfil) */
+    /* ===== Patch mobile-first para evitar overflow en "Agendar consulta" ===== */
+    .two{ display:grid; gap:16px; grid-template-columns: minmax(0,1fr) }
+    @media (min-width:900px){
+      .two{ grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr) }
+    }
+    .form-grid{ display:grid; grid-template-columns:1fr; gap:12px }
+    @media (min-width:560px){
+      .form-grid{ grid-template-columns:1fr 1fr }
+      .form-grid > label:nth-child(3){ grid-column:1/-1 }
+      .form-grid > .actions{ grid-column:1/-1 }
+    }
+    /* hijos encogibles + inputs full width */
+    .card, .card *{ min-width:0 }
+    form :where(input, textarea){ width:100%; max-width:100% }
+    .card{ overflow-wrap:anywhere }
+
+    /* Impresión básica */
     @media print{
       header, footer, .no-print{ display:none }
       section{ padding:18px 0 }
@@ -264,30 +342,39 @@
 
     <!-- ================= Contacto / CTA ================= -->
     <section id="contacto">
-      <div class="card" style="background:linear-gradient(180deg, var(--accent-weak), #fff)">
+      <div class="card" style="background:linear-gradient(180deg, var(--accent-weak), transparent)">
         <div class="two" style="align-items:center">
           <div>
             <h3 class="h2 serif" style="margin:0 0 .4rem">Agendar consulta</h3>
             <p class="lead" style="margin:0 0 .6rem">Comparte el asunto, objetivos y plazos. Respondo en 24–48h hábiles.</p>
-            <form onsubmit="event.preventDefault()" class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
-              <label class="grid" style="gap:6px">
+
+            <!-- Formulario mobile-first sin overflow -->
+            <form onsubmit="event.preventDefault()" class="form-grid">
+              <label style="display:grid; gap:6px">
                 <span>Nombre</span>
-                <input required placeholder="Nombre y apellido" style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px" />
+                <input required placeholder="Nombre y apellido"
+                  style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px; background:var(--panel); color:var(--ink)" />
               </label>
-              <label class="grid" style="gap:6px">
+
+              <label style="display:grid; gap:6px">
                 <span>Correo</span>
-                <input type="email" required placeholder="correo@ejemplo.com" style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px" />
+                <input type="email" required placeholder="correo@ejemplo.com"
+                  style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px; background:var(--panel); color:var(--ink)" />
               </label>
-              <label class="grid" style="gap:6px; grid-column:1/-1">
+
+              <label style="display:grid; gap:6px">
                 <span>Mensaje</span>
-                <textarea rows="5" placeholder="Resumen del asunto" style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px"></textarea>
+                <textarea rows="5" placeholder="Resumen del asunto"
+                  style="padding:.75rem .9rem; border:1px solid var(--rule); border-radius:10px; background:var(--panel); color:var(--ink)"></textarea>
               </label>
-              <div style="grid-column:1/-1; display:flex; gap:.6rem; flex-wrap:wrap">
+
+              <div class="actions" style="display:flex; gap:.6rem; flex-wrap:wrap">
                 <button class="btn primary" type="submit">Enviar</button>
                 <a class="btn" href="#inicio">Volver arriba</a>
               </div>
             </form>
           </div>
+
           <div class="card" style="border-style:dashed">
             <p class="mono" style="margin:0 0 .4rem"><strong>Datos de contacto</strong></p>
             <ul class="list">
@@ -307,7 +394,7 @@
   <footer>
     <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
       <div>© <span id="year"></span> Apellido & Asociados • Todos los derechos reservados</div>
-      <div style="display:flex; gap:12px">
+      <div style="display:flex; gap:12px; flex-wrap:wrap">
         <a href="#" style="color:inherit">Aviso de privacidad</a>
         <a href="#" style="color:inherit">Términos</a>
         <a href="#inicio" style="color:inherit">Inicio</a>
@@ -321,21 +408,48 @@
 
     // Menú móvil
     const toggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('nav');
+    const nav = document.getElementById('mobile-nav');
     if(toggle && nav){
       toggle.addEventListener('click', () => {
         const isOpen = nav.classList.toggle('open');
         toggle.setAttribute('aria-expanded', String(isOpen));
       });
+
+      // Cerrar al pulsar enlace (mejor UX)
+      const links = nav.querySelectorAll('.navlink');
+      links.forEach(a => a.addEventListener('click', ()=>{
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded','false');
+        toggle.focus({preventScroll:true});
+      }));
+
+      // Cerrar con Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.focus({ preventScroll: true });
+        }
+      });
+
+      // Cerrar al hacer click fuera
+      document.addEventListener('click', (e) => {
+        const clickOnToggle = toggle.contains(e.target);
+        const clickInsideNav = nav.contains(e.target);
+        if (nav.classList.contains('open') && !clickOnToggle && !clickInsideNav) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
     }
 
     // Scrollspy ligero
-    const links = document.querySelectorAll('.navlink');
-    const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const spyLinks = document.querySelectorAll('.navlink');
+    const sections = [...spyLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
     const onScroll = () => {
       const y = window.scrollY + 90; let activeId = '';
       for(const sec of sections){ if(sec && sec.offsetTop <= y) activeId = '#' + sec.id; }
-      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeId));
+      spyLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeId));
     };
     document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
